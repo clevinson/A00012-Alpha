@@ -1,0 +1,13 @@
+{
+  "transit": {
+    "type": "arc",
+    "thetha": 0.7
+  },
+  "particle": {
+    "type": "point",
+    "velocity": {
+      "x": 5,
+      "y": -2
+    }
+  }
+}
