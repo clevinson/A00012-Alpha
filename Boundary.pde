@@ -18,6 +18,19 @@ class Boundary {
     linkPointsMap.put(link.end, 
   }
   
+  void distributeLinks(){
+    length = 1 / links.size();
+    for( int i=0; i < links.size(); i++ ) {
+      link = (LinearLink) links.get(i);
+      link.start = i * length;
+      link.end = link.start + length;
+    }
+  }
+  
+  void updateLinkPoints() {
+    //  recreate hashmap.
+  }
+  
   void placeLink(link){
     
   }
@@ -38,8 +51,5 @@ class Boundary {
   float arcPosition(element){
     element.position // do something with this
     //some float 0.0 - 1.0  
-  }
-    
-  
-  
+  }  
 }
