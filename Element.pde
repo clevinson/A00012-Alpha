@@ -3,10 +3,9 @@ class Element{
   String type;
   
   Element() {
-    
+    type = "Element";
   }
   
-  react(Element element) {
-    
+  void reactWith(Element element) { 
   }
 }
