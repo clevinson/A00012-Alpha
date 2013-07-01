@@ -8,4 +8,7 @@ class Element{
   
   void reactWith(Element element) { 
   }
+  
+  void act() {
+  }
 }

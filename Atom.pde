@@ -14,5 +14,14 @@ class Atom extends Element {
   }
   
   void reactWith(Element element) {
+    if( element.type.equals( "Boundary" ) {
+      // React with the boundary
+    }
+    
+    act();
+  }
+  
+  void act() {
+    position.addSelf( velocity );
   }
 }
