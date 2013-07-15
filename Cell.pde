@@ -1,6 +1,6 @@
 class Cell{
 
-  ArrayList elements;
+  ArrayList<Element> elements;
   
   Cell() {
     elements = new ArrayList();
@@ -10,13 +10,16 @@ class Cell{
     for(int A=0; A < elements.size(); A++) {
       Element ElementA = (Element) elements.get(A);
       for(int B = A++ ; B < elements.size(); B++) {
-        Element ElementB = (Element) element.get(B);
-        A.reactWith(B);        
+        Element ElementB = (Element) elements.get(B);
+        ElementA.reactWith( ElementB );        
       }
+    }
+    for( Element e : elements) {
+      e.act();
     }
   }
   
-  void addElement(element) {
-    elements.add(elment);
+  void addElement(Element element) {
+    elements.add(element);
   }
 }
