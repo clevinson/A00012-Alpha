@@ -1,4 +1,20 @@
 class BoundaryHandler {
+  
+  Boundary parent;
+  
+  BoundaryHandler(Boundary Parent) {
+    parent = Parent;
+  }
+  
+  void send(Element element, float transitPosition) {
+    cell.repotDepature(element);
+    print( "Element \"" );
+    println( element + "\" left boundary \"" + parent + "\" at position " + transitPosition );
+    // When added to put queue of the NetworkIO the element gets added to a list of leaving element;
+  }
+}
+
+/*class BoundaryHandler {
   Boundary parent;
   NetworkIO network;
 
@@ -18,5 +34,4 @@ class BoundaryHandler {
     network.queue(message);
   }
   
-}
-
+}*/

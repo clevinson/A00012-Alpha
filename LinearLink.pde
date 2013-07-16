@@ -1,4 +1,4 @@
-class LinearLink{
+/*class LinearLink{
   
   Boundary  parent;
   string    destination;
@@ -13,4 +13,4 @@ class LinearLink{
     
     parent.addLink(this);
   }  
-}
+}*/

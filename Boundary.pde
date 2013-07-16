@@ -1,4 +1,45 @@
-class Boundary {
+class Boundary extends Element {
+
+  BoundaryHandler handler;
+  Spline2D        shape;
+  int             detail;
+  float           thickness;
+  String          name;
+  
+  Boundary( Spline2D Shape, String Name ) {
+    type      = "Boundary";
+    handler   = new BoundaryHandler(this);
+    shape     = Shape;
+    detail    = shape.getPointList().size() * 4 ;
+    thickness = 10;
+    name      = Name;
+  }
+  
+  void reactWith(Element element) {
+    if(element.type.equals("Atom")) reactWithAtom( (Atom) element );
+  }
+  
+  void reactWithAtom(Atom atom) {
+    float count = 0;
+    ArrayList<Vec2D> curvePoints = (ArrayList) shape.computeVertices(detail);
+    for(Iterator s=curvePoints.iterator(); s.hasNext();) {
+      Vec2D shapePoint = (Vec2D) s.next();
+      if( atom.position.distanceTo( shapePoint ) < thickness ) {
+        //print( this );
+        //println( " HIT" );
+        handler.send( atom, count / curvePoints.size() );
+        break;
+      } else {
+        count++;
+      }
+    }
+  }
+}
+
+
+
+
+/*class Boundary {
   linkPointsMap = {
     0.1 => links[0],
     0.3 => false,
@@ -8,6 +49,7 @@ class Boundary {
   linkPoints = linkPointsMap.keySet;
   ArrayList<LinearLinks> links;
   BoundaryHandler handler;
+  
   Boundary(){
     handler = new BoundaryHandler(this);
   }
@@ -52,4 +94,4 @@ class Boundary {
     element.position // do something with this
     //some float 0.0 - 1.0  
   }  
-}
+}*/

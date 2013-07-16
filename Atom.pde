@@ -14,9 +14,11 @@ class Atom extends Element {
   }
   
   void reactWith(Element element) {
-    if( element.type.equals( "Boundary" ) ) {
-      // React with the boundary
-    }
+    if( element.type.equals( "Boundary" ) ) reactWithBoundary((Boundary) element);
+  }
+  
+  void reactWithBoundary( Boundary boundary ) {
+    boundary.reactWithAtom( this );
   }
   
   void act() {
