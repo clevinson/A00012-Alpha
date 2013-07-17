@@ -9,10 +9,12 @@ class BoundaryHandler {
   void send(Element element, float transitPosition) {
     cell.repotDepature(element);
     print( "Element \"" );
-    println( element + "\" left boundary \"" + parent + "\" at position " + transitPosition );
+    println( element + "\" of type \"" + element.type + "\" left boundary \"" + parent + "\" at position " + transitPosition );
     // When added to put queue of the NetworkIO the element gets added to a list of leaving element;
   }
 }
+
+// OLDER SKETCH
 
 /*class BoundaryHandler {
   Boundary parent;

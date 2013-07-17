@@ -16,7 +16,8 @@ class Boundary extends Element {
   }
   
   void reactWith(Element element) {
-    if(element.type.equals("Atom")) reactWithAtom( (Atom) element );
+    if(element.type.equals("Atom")) reactWithAtom((Atom) element);
+    if(element.type.equals("Flux")) reactWithFlux((Flux) element);
   }
   
   void reactWithAtom(Atom atom) {
@@ -24,10 +25,22 @@ class Boundary extends Element {
     ArrayList<Vec2D> curvePoints = (ArrayList) shape.computeVertices(detail);
     for(Iterator s=curvePoints.iterator(); s.hasNext();) {
       Vec2D shapePoint = (Vec2D) s.next();
-      if( atom.position.distanceTo( shapePoint ) < thickness ) {
-        //print( this );
-        //println( " HIT" );
+      if( atom.pos.distanceTo( shapePoint ) < thickness ) {
         handler.send( atom, count / curvePoints.size() );
+        break;
+      } else {
+        count++;
+      }
+    }
+  }
+  void reactWithFlux(Flux flux) {
+    float count = 0;
+    ArrayList<Vec2D> curvePoints = (ArrayList) shape.computeVertices(detail);
+    for(Iterator s=curvePoints.iterator(); s.hasNext();) {
+      Vec2D shapePoint = (Vec2D) s.next();
+      if( flux.pos.distanceTo( shapePoint ) < thickness ) {
+        for( Flux neigh : flux.neighbours ) neigh.neighbours.remove( flux );
+        handler.send( flux, count / curvePoints.size() );
         break;
       } else {
         count++;
@@ -36,8 +49,7 @@ class Boundary extends Element {
   }
 }
 
-
-
+// OLDER SKETCH 
 
 /*class Boundary {
   linkPointsMap = {

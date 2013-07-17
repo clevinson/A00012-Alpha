@@ -1,7 +1,7 @@
 class Atom extends Element {
   
-  Vec2D position;
-  Vec2D velocity;
+  Vec2D pos;
+  Vec2D vel;
   
   Atom() {
    type = "Atom";
@@ -9,8 +9,8 @@ class Atom extends Element {
   
   Atom( Vec2D position, Vec2D velocity ) {
     type = "Atom";
-    this.position = position;
-    this.velocity = velocity;
+    pos  = position;
+    vel  = velocity;
   }
   
   void reactWith(Element element) {
@@ -22,6 +22,6 @@ class Atom extends Element {
   }
   
   void act() {
-    position.addSelf( velocity );
+    pos.addSelf( vel );
   }
 }

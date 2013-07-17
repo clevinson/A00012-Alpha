@@ -1,6 +1,7 @@
-#Fictious Physics
+#Fictional Physics
 
-## This is a second header
+## Current Controls
 
-* thing to do
-* other thing to do
+* MouseDrag : Move scene in x and y.
+* MouseWheel : Zoom in or out.
+* a : Add an atom at mouse position. (Bugs when zoomed in or out).

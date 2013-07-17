@@ -34,4 +34,16 @@ class Cell{
   void repotDepature(Element element) {
     departingElements.add(element);
   }
+  
+  void debugCountElements( ArrayList<Element> elems ) {
+    int atom      = 0;
+    int boundary  = 0;
+    int flux      = 0;
+    for( Element e : elems ) {
+      if(e.type.equals("Atom")) atom += 1;
+      if(e.type.equals("Boundary")) boundary += 1;
+      if(e.type.equals("Flux")) flux +=1;
+    }
+    println( "Element list contains " + atom + " atoms, " + boundary + " boundary and " + flux + " flux." );
+  }
 }
