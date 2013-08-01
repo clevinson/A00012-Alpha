@@ -26,13 +26,12 @@ class BoundaryHandler {
   }
     
   void send(destination, transitPosition, Element elem){
-    JSON transitObj = JSON.createObject();
-    transitObj.setString("type", "linear");
-    transitObj.setFloat(transitPosition);
-    JSON message = JSON.createObject();
-    message.setJSON("element", elem.to_json);
-    message.setString("destination", destination);
-    message.setJSON("transit", transitObj);
+    Message message = new Message();
+
+    message.setDestination(destination);
+    message.setTransitPosition(transitPosition);
+    message.setElement(element);
+    message.setReturnAddress(network.myAddress);
     network.queue(message);
   }
   
