@@ -19,6 +19,7 @@ class Render{
     fill(3, 7, 10, 100); 
     rect(0,0,width,height);
     
+    
     if( mouseNavigation ) {
       pushMatrix();
       translate( xOffset, yOffset );
@@ -60,6 +61,12 @@ class Render{
               ((Flux) e).pos.y, 
               ((Flux) e).pos.x + ((Flux) e).vel.x , 
               ((Flux) e).pos.y + ((Flux) e).vel.y );
+      }
+      
+      if(e.type.equals( "Pulk" )) {
+        strokeWeight(3);
+        stroke(240, 0, 255 * ((Pulk) e).vel.magnitude());
+        point( ((Pulk) e).pos.x, ((Pulk) e).pos.y );
       }
     }
     

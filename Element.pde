@@ -11,4 +11,10 @@
   
   void act() {
   }
+  
+  JSONObject toJSON() {
+    JSONObject element = new JSONObject();
+    element.setString("type", "element");
+    return element;
+  }
 }

@@ -1,11 +1,17 @@
+
 import toxi.geom.*;
 import toxi.math.waves.*;
+import toxi.math.noise.*;
 import toxi.processing.*;
 import java.util.Iterator;
 import java.awt.event.*;
 
-Cell   cell;
-Render render;
+Cell      cell;
+Render    render;
+NetworkIO networkIO;
+
+Graphview graphview;
+String  gui;  // Scene, Graph
 
 void setup() {
    size(1024, 800);
@@ -14,13 +20,16 @@ void setup() {
    addMouseWheelListener(new MouseWheelListener() { 
      public void mouseWheelMoved(MouseWheelEvent mwe) { 
      mouseWheel(mwe.getWheelRotation());
-   }}); 
+   }});
+   
+   gui = "Scene";
+   graphview = new Graphview();
    
    cell   = new Cell();
    render = new Render(cell);
    
    createBoundary();
-   createFluxObject(500, 5, 50);
+   createFluxObject( 1000, 4, 20 );
 }
 
 void draw() {
@@ -28,22 +37,47 @@ void draw() {
   cell.step();
   render.render();
   
+  if(gui.equals("Graph")) {
+    graphview.sampleFunction(new Pulk(new Vec2D()));
+    graphview.render();
+  }
+  
   // debug graphics
   if( false ) {
-    if( true )  fill(255); text( "FRAMERATE: " + frameRate, 50, 50 );
-    if( false ) drawFunction(new Flux(new Vec2D()));
+    if( false ) fill(255); text( "FRAMERATE: " + frameRate, 50, 50 );
+  }
+  
+  // experiments
+  if( false ) {
+    if(true) pulkSeeder();
   }
 }
 
 // INTERACTION
 
+
 void mouseDragged() {
-  render.xOffset -= pmouseX - mouseX;
-  render.yOffset -= pmouseY - mouseY;
+  if(gui.equals("Graph")) {
+    if(mouseButton==CENTER) {
+      graphview.res.x = abs(graphview.res.x - (pmouseX - mouseX)*0.01);
+      graphview.res.y = abs(graphview.res.y - (pmouseY - mouseY)*0.01);
+    } else {
+      graphview.pos.x -= pmouseX - mouseX;
+      graphview.pos.y -= pmouseY - mouseY;
+    }      
+  } else if(gui.equals("Scene")) {
+    render.xOffset -= pmouseX - mouseX;
+    render.yOffset -= pmouseY - mouseY;    
+  }
 }
 
 void mouseWheel(float delta) {
-  render.scale -= delta * 0.025;
+  if(gui.equals("Graph")) {
+    graphview.res.x = abs(graphview.res.x - delta * 0.025);
+    graphview.res.y = abs(graphview.res.y - delta * 0.025);
+  } else if(gui.equals("Scene")) {
+    render.scale -= delta * 0.025;
+  }
 }
 
 void keyPressed() {
@@ -51,12 +85,53 @@ void keyPressed() {
     Element e = new Atom( new Vec2D( mouseX, mouseY ), new Vec2D( random( -2, 2 ), random( -2, 2 ) ) );
     cell.addElement( e );
   }
+  if( key=='p' ) {
+    cell.elements.add( new Pulk( new Vec2D( mouseX, mouseY ) ) );
+  }
   if( key=='c' ) {
     cell.debugCountElements(cell.elements);
   }
+  if( key=='G' ) gui = "Graph";
+  if( key=='S' ) gui = "Scene";
 }
 
 // VARIOUS INITIALIZATION and DEBUG FUNCTIONS
+void pulkSeeder() {
+  boolean foundNewPos = false;
+  Vec2D   seedPosition = new Vec2D();
+  Pulk    seedPulk;
+  
+  float   spawnRadius = 40;
+  float   threshold   = 0.1;
+  float   temperature = 0; // Average velocity
+  int     counter     = 0;
+  
+  for(Element e : cell.elements) {
+    if(e.type.equals("Pulk")) {
+      temperature += ((Pulk) e).vel.magnitude();
+      counter++;
+    }
+  }
+  
+  if( temperature / counter < threshold ) {
+    while(!foundNewPos) {
+      Element elm = cell.elements.get(floor(random(1, cell.elements.size())));
+      if( elm.type.equals("Pulk") ) {
+        seedPulk     = (Pulk) elm;
+        seedPosition = new Vec2D(random(-spawnRadius,spawnRadius), random(-spawnRadius,spawnRadius)).addSelf(seedPulk.pos);;
+        foundNewPos  = true;
+        for(Element e : cell.elements) {
+          if(e.type.equals("Pulk")) {
+            if(((Pulk) e).pos.distanceTo(seedPosition) < spawnRadius * 0.5) foundNewPos = false;
+          }
+        }
+      }
+    }
+    println( temperature / counter );
+    println( "Added a new Pulk, now total count amounts to: " + (cell.elements.size()-1) + " at a framerate of: " + frameRate );
+    cell.elements.add(new Pulk(seedPosition));
+  }  
+}
 
 void createFluxObject( int amount, int numberOfNeighbours, float bondingDistance ) {
   ArrayList<Flux> scatteredPoints = new ArrayList<Flux>();
@@ -77,66 +152,6 @@ void createFluxObject( int amount, int numberOfNeighbours, float bondingDistance
   }
   for( Flux f : scatteredPoints ) {
     cell.elements.add(f);
-  }
-}
-
-void drawFunction( Element element ) { 
-  float xorg, yorg, x, y, xmin, xmax, ymin, ymax, xres, yres, fres;
-  
-  fres = .25;    // resolution of graph ( low = better )
-  xres = 2;      // resolution of grid  ( low = higher )
-  yres = 5;      // resolution of grid  ( low = higher )
-  xmin = -50;    // graph x start
-  xmax = 50;     // graph x end
-  ymin = -100;   // graph y start
-  ymax = 100;    // graph y end
- 
-  xorg = width / 2;
-  yorg = height / 2;  
-  
-  stroke( 255 ); 
-  strokeWeight( 1 );
-  for( x=xmin; x < xmax; x += xres ) {
-    for( y=ymin; y < ymax; y += yres ) {
-      point( map(x, xmin, xmax, 0, width), map(y, ymin, ymax, 0, height ) );
-    } 
-  }
-  
-  stroke( 255 );
-  textAlign(CENTER);
-  for( x=0; x <= xmax; x += xres ) {
-    text( nf(x,1,0), map(x, 0, xmax, xorg, width), yorg - 2 );
-  }
-  for( x=-xres; x >= xmin; x -= xres ) {
-    text( nf(x,1,0), map(x, 0, xmin, xorg, 0), yorg - 2 );
-  }
-  for( y=+yres; y <= ymax; y += yres ) {
-    text( nf(-y,1,0), xorg, map(y, 0, ymax, yorg, height) - 2 );
-  }
-  for( y=-yres; y >= ymin; y -= yres ) {
-    text( nf(-y,1,0), xorg, map(y, 0, ymin, yorg, 0) - 2 );
-  }
-  
-  // Function ( Be aware: I've flipped the rendering, so that the y positive face upwards, this could lead to potential confusion. ) 
-  if(element.type.equals("Flux")) {
-    if(true) {  // Relax Function
-      stroke( 255, 212, 70 );
-      for( x=xmin; x < xmax; x += fres ) {
-        line( map( x-fres, xmin, xmax, 0, width), 
-              map(-((Flux) element).relaxFunction( x-fres ), ymin, ymax, 0, height), 
-              map( x, xmin, xmax, 0, width),
-              map(-((Flux) element).relaxFunction( x ), ymin, ymax, 0, height) ); 
-      }
-    }
-    if(true) {  // Affect Function
-      stroke( 181, 240, 220 );
-      for( x=xmin; x < xmax; x += fres ) {
-      line( map( x-fres, xmin, xmax, 0, width), 
-            map(-((Flux) element).affectFunction( x-fres ), ymin, ymax, 0, height), 
-            map( x, xmin, xmax, 0, width),
-            map(-((Flux) element).affectFunction( x ), ymin, ymax, 0, height) ); 
-      }
-    }
   }
 }
 
@@ -192,4 +207,3 @@ void createBoundary() {
   //cell.addElement(b3);
   cell.addElement(b4);
 }
-

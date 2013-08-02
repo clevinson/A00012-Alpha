@@ -3,7 +3,7 @@ class Message {
   Element element;
   String destination;
   String returnAddress;
-  TransitPosition float;
+  float transitPosition;
 
   Message(){
   }
@@ -24,9 +24,9 @@ class Message {
     this.transitPosition = transPos;
   }
 
-  JSON toJSON(){
-    JSON jsonMessage = JSON.createObject();
-    jsonMessage.setJSON("element", element.toJSON());
+  JSONObject toJSON(){
+    JSONObject jsonMessage = new JSONObject();
+    //jsonMessage.setJSONObject("element", element.toJSON());
     jsonMessage.setString("destination", destination);
     jsonMessage.setString("returnAddress", returnAddress);
     jsonMessage.setFloat("transitPosition", transitPosition);

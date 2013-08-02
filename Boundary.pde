@@ -10,7 +10,7 @@ class Boundary extends Element {
     type      = "Boundary";
     handler   = new BoundaryHandler(this);
     shape     = Shape;
-    detail    = shape.getPointList().size() * 4 ;
+    detail    = shape.getPointList().size() * 2 ;
     thickness = 10;
     name      = Name;
   }
@@ -26,7 +26,7 @@ class Boundary extends Element {
     for(Iterator s=curvePoints.iterator(); s.hasNext();) {
       Vec2D shapePoint = (Vec2D) s.next();
       if( atom.pos.distanceTo( shapePoint ) < thickness ) {
-        handler.send( atom, count / curvePoints.size() );
+        handler.sendDebug( atom, count / curvePoints.size() );
         break;
       } else {
         count++;
@@ -40,7 +40,7 @@ class Boundary extends Element {
       Vec2D shapePoint = (Vec2D) s.next();
       if( flux.pos.distanceTo( shapePoint ) < thickness ) {
         for( Flux neigh : flux.neighbours ) neigh.neighbours.remove( flux );
-        handler.send( flux, count / curvePoints.size() );
+        handler.sendDebug( flux, count / curvePoints.size() );
         break;
       } else {
         count++;

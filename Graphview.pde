@@ -80,6 +80,15 @@ class Graphview {
         samples.add(new Vec2D(x,y));
       }
     }
+    
+    if(element.type.equals("Pulk")) {
+      for(float s=-n*0.5; s < n*0.5; s++) {
+        float x = map(s, -n*0.5, n*0.5, xmin*res.x, xmax*res.x);
+        float y = ((Pulk) element).collapseFunction(x);
+        samples.add(new Vec2D(x,y));
+      }
+    }
+    
   }
   void updateBounds() {
     xmin = floor(-pos.x / scaling);
