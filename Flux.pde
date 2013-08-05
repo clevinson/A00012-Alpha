@@ -112,4 +112,19 @@ class Flux extends Element {
     float e = (float) Math.E;
     return affectAmount * pow( e, -1*( (x*x) / (2*pow((affectRange*0.25),2))) );
   }
+  
+  JSONObject toJSON() {
+    JSONObject JSONElement = new JSONObject();
+    JSONElement.setString("type", type);
+    JSONElement.setFloat("mass", mass);
+    JSONElement.setFloat("relaxRange", relaxRange);
+    JSONElement.setFloat("affectRange", affectRange);
+    JSONElement.setFloat("affecAmount", affectAmount);
+    JSONElement.setFloat("seperationDistance", seperationDistance);
+    JSONElement.setFloat("seperationForce", seperationForce);
+    JSONElement.setFloat("bondingDistance", bondingDistance);
+    JSONElement.setFloat("numberOfBonds", numberOfBonds);
+    JSONElement.setJSONArray("vel", new JSONArray().setFloat(0, vel.x).setFloat(1, vel.y));
+    return JSONElement;
+  }
 }

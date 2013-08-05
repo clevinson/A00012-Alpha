@@ -17,11 +17,22 @@ class Atom extends Element {
     if( element.type.equals( "Boundary" ) ) reactWithBoundary((Boundary) element);
   }
   
+  void reactWith(Boundary element) {
+    if( element.type.equals( "Boundary" ) ) reactWithBoundary((Boundary) element);
+  }
+  
   void reactWithBoundary( Boundary boundary ) {
     boundary.reactWithAtom( this );
   }
   
   void act() {
     pos.addSelf( vel );
+  }
+  
+  JSONObject toJSON() {
+    JSONObject JSONElement = new JSONObject();
+    JSONElement.setString("type", type);
+    JSONElement.setJSONArray("vel", new JSONArray().setFloat(0, vel.x).setFloat(1, vel.y));
+    return JSONElement;
   }
 }
