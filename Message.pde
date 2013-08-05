@@ -26,7 +26,7 @@ class Message {
 
   JSONObject toJSON(){
     JSONObject jsonMessage = new JSONObject();
-    //jsonMessage.setJSONObject("element", element.toJSON());
+    jsonMessage.setJSONObject("element", element.toJSON());
     jsonMessage.setString("destination", destination);
     jsonMessage.setString("returnAddress", returnAddress);
     jsonMessage.setFloat("transitPosition", transitPosition);

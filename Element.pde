@@ -13,8 +13,6 @@
   }
   
   JSONObject toJSON() {
-    JSONObject element = new JSONObject();
-    element.setString("type", "element");
-    return element;
+    return new JSONObject();
   }
 }

@@ -14,7 +14,6 @@ class Flux extends Element {
   Vec2D avgNeighPos;
   
   Flux(Vec2D position) {
-    
     mass         = 0.9;
     relaxRange   = 0.05; // Not in pixel units ( lower = longer range );
     affectRange  = 50;  // In normal units
@@ -30,6 +29,25 @@ class Flux extends Element {
     acc = new Vec2D();
     avgNeighPos = new Vec2D();
     neighbours = new ArrayList<Flux>();
+  }
+  
+  Flux(JSONObject flux) {  
+    mass          = flux.getFloat("mass");
+    relaxRange    = flux.getFloat("relaxRange");
+    affectRange   = flux.getFloat("affectRange");
+    affectAmount  = flux.getFloat("affectAmount");
+    seperationDistance = flux.getFloat("seperationDistance");
+    seperationForce    = flux.getFloat("seperationForce");
+    bondingDistance    = flux.getFloat("bondingDistance");
+    numberOfBonds      = flux.getFloat("numberOfBonds");
+    
+    type = flux.getString("type");
+    pos  = new Vec2D();
+    vel  = new Vec2D( flux.getJSONArray("vel").getFloat(0), flux.getJSONArray("vel").getFloat(1));
+    acc  = new Vec2D();
+    avgNeighPos = new Vec2D();
+    neighbours = new ArrayList<Flux>();
+    
   }
   
   void reactWith(Element element) {

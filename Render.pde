@@ -7,7 +7,7 @@ class Render{
     this.cell = cell;
     xOffset = 0;
     yOffset = 0;
-    scale   = 1;
+    scale   = 0.5;
   }
   
   void render() {

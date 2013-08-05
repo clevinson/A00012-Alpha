@@ -7,12 +7,17 @@ class Atom extends Element {
    type = "Atom";
   }
   
-  Atom( Vec2D position, Vec2D velocity ) {
+  Atom(Vec2D position, Vec2D velocity) {
     type = "Atom";
     pos  = position;
     vel  = velocity;
   }
   
+  Atom(JSONObject atom) {
+    type = atom.getString("type");
+    pos  = new Vec2D();
+    vel  = new Vec2D( atom.getJSONArray("vel").getFloat(0), atom.getJSONArray("vel").getFloat(1));
+  }  
   void reactWith(Element element) {
     if( element.type.equals( "Boundary" ) ) reactWithBoundary((Boundary) element);
   }

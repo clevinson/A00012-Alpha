@@ -10,11 +10,11 @@ class Boundary extends Element {
     type      = "Boundary";
     handler   = new BoundaryHandler(this);
     shape     = Shape;
-    detail    = shape.getPointList().size() * 2 ;
+    detail    = shape.getPointList().size() * 4 ;
     thickness = 10;
     name      = Name;
   }
-  
+    
   void reactWith(Element element) {
     if(element.type.equals("Atom")) reactWithAtom((Atom) element);
     if(element.type.equals("Flux")) reactWithFlux((Flux) element);
@@ -33,6 +33,7 @@ class Boundary extends Element {
       }
     }
   }
+  
   void reactWithFlux(Flux flux) {
     float count = 0;
     ArrayList<Vec2D> curvePoints = (ArrayList) shape.computeVertices(detail);
@@ -46,6 +47,12 @@ class Boundary extends Element {
         count++;
       }
     }
+  }
+  
+  Vec2D linearToWorldPosition(float linearPosition) {  // Must be debuged
+    ArrayList<Vec2D> curvePoints = (ArrayList) shape.computeVertices(detail);
+    linearPosition *= curvePoints.size();
+    return curvePoints.get(floor(linearPosition)).add(curvePoints.get(ceil(linearPosition))).scale(0.5);
   }
 }
 
