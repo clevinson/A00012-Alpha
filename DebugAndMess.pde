@@ -53,7 +53,7 @@ void keyPressed() {
  * METH...ODDS : crystals and oddity.  
  */
 
-Message fauxMessage(String destination, String returnAdress, float transitPosition, Element element){
+Message fauxMessage(NetAddress destination, NetAddress returnAdress, float transitPosition, Element element){
     Message message = new Message();
     message.setDestination(destination);
     message.setTransitPosition(transitPosition);

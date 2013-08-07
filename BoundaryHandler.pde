@@ -15,13 +15,13 @@ class BoundaryHandler {
     // When added to put queue of the NetworkIO the element gets added to a list of leaving element;
   }
 
-  void send(String destination, float transitPosition, Element element) {
+  void send(NetAddress destination, Element element, float transitPosition) {
     Message message = new Message();
     message.setDestination(destination);
     message.setTransitPosition(transitPosition);
     message.setElement(element);
     message.setReturnAddress(network.myAddress);
-    network.queue(message);
+    network.toOutQueue(message);
   }
 
   void receive(Message message) {  // Must be debuged

@@ -1,8 +1,8 @@
 class Message {
   
   Element element;
-  String destination;
-  String returnAddress;
+  NetAddress destination;
+  NetAddress returnAddress;
   float transitPosition;
 
   Message(){
@@ -31,11 +31,11 @@ class Message {
     this.element = element;
   } 
 
-  void setDestination(String dest){
+  void setDestination(NetAddress dest){
     this.destination = dest;
   }
 
-  void setReturnAddress(String returnAddress){
+  void setReturnAddress(NetAddress returnAddress){
     this.returnAddress = returnAddress;
   }
 
@@ -46,13 +46,15 @@ class Message {
   JSONObject toJSON(){
     JSONObject jsonMessage = new JSONObject();
     jsonMessage.setJSONObject("element", element.toJSON());
-    jsonMessage.setString("destination", destination);
-    jsonMessage.setString("returnAddress", returnAddress);
+    jsonMessage.setString("destination", destination.address());
+    jsonMessage.setString("returnAddress", returnAddress.address());
     jsonMessage.setFloat("transitPosition", transitPosition);
     
     return jsonMessage;
   }
   
-  void fromJSON(JSONObject string) {
+  String serialize(){
+    return toJSON().toString();
   }
+
 }

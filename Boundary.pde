@@ -9,6 +9,7 @@ class Boundary extends Element {
     handler = new BoundaryHandler(this);
     this.radius = radius;
     this.pos = pos;
+    heaven = new NetAddress("127.0.0.1",12000);
   }
   
   void reactWith(Element element) {
@@ -24,7 +25,7 @@ class Boundary extends Element {
   
   void reactWithFlux(Flux flux) {
     if(flux.pos.distanceTo(pos) >= radius) {
-      handler.sendDebug(flux, getTetha(flux.pos));
+      handler.send(heaven, flux, getTetha(flux.pos));
     }
   }
   

@@ -34,6 +34,8 @@ void setup() {
 
 void draw() {
   
+  networkIO.tick();
+  
   cell.step();
   render.render();
 

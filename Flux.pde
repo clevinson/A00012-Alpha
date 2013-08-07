@@ -137,7 +137,7 @@ class Flux extends Element {
     JSONElement.setFloat("mass", mass);
     JSONElement.setFloat("relaxRange", relaxRange);
     JSONElement.setFloat("affectRange", affectRange);
-    JSONElement.setFloat("affecAmount", affectAmount);
+    JSONElement.setFloat("affectAmount", affectAmount);
     JSONElement.setFloat("seperationDistance", seperationDistance);
     JSONElement.setFloat("seperationForce", seperationForce);
     JSONElement.setFloat("bondingDistance", bondingDistance);
