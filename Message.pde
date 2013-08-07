@@ -10,8 +10,10 @@ class Message {
   
   Message(String OscMessage) {
     JSONObject JSONMessage = JSONObject.parse(OscMessage);
-    setDestination(JSONMessage.getString("destination"));
-    setReturnAddress(JSONMessage.getString("returnAddress"));
+    destination = new NetAddress(JSONMessage.getString("destination"), JSONMessage.getInt("destinationPort"));
+    returnAddress = new NetAddress(JSONMessage.getString("returnAddress"), JSONMessage.getInt("returnPort"));
+    setDestination(destination);
+    setReturnAddress(returnAddress);
     setTransitPosition(JSONMessage.getFloat("transitPosition"));
     
     if(JSONMessage.getJSONObject("element").getString("type").equals("Atom")) {

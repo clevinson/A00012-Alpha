@@ -3,13 +3,14 @@ class Boundary extends Element {
   BoundaryHandler handler;
   float radius;
   Vec2D pos;
+  NetAddress heaven;
   
   Boundary(float radius, Vec2D pos) {
     type = "Boundary"; 
     handler = new BoundaryHandler(this);
     this.radius = radius;
     this.pos = pos;
-    heaven = new NetAddress("127.0.0.1",12000);
+    heaven = new NetAddress("192.168.55.10",12000);
   }
   
   void reactWith(Element element) {

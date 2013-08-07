@@ -25,8 +25,8 @@ class Flux extends Element {
     
     type = "Flux";
     pos = position;
-    vel = new Vec2D();
-    acc = new Vec2D();
+    vel = new Vec2D(0,0);
+    acc = new Vec2D(0,0);
     avgNeighPos = new Vec2D();
     neighbours = new ArrayList<Flux>();
   }
@@ -142,7 +142,9 @@ class Flux extends Element {
     JSONElement.setFloat("seperationForce", seperationForce);
     JSONElement.setFloat("bondingDistance", bondingDistance);
     JSONElement.setFloat("numberOfBonds", numberOfBonds);
-    JSONElement.setJSONArray("vel", new JSONArray().setFloat(0, vel.x).setFloat(1, vel.y));
+    println("vel.x: " + vel.x);
+    println("vel.y: " + vel.y);
+    JSONElement.setJSONArray("vel", new JSONArray().setFloat(0, (float)vel.x).setFloat(1, (float)vel.y));
     return JSONElement;
   }
 }

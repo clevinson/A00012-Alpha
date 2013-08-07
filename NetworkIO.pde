@@ -46,9 +46,9 @@ class NetworkIO{
   }
 
   void send(Message message){
-    NetAddress destination;
+    NetAddress destination = message.destination;
     OscMessage oscMessage = new OscMessage("/test");
     oscMessage.add(message.serialize());
-    oscP5.send(oscMessage, myAddress);
+    oscP5.send(oscMessage, destination);
   }
 }
