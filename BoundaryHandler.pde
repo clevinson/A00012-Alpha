@@ -27,9 +27,14 @@ class BoundaryHandler {
   void receive(Message message) {  // Must be debuged
     if (message.element.type.equals("Atom")) {
       Atom atom = (Atom) message.element;
+      
+      //atom.vel.set( tan(
+      
+      cell.elements.add(atom);
     }
     if (message.element.type.equals("Flux")) {
       Flux flux = (Flux) message.element;
+      cell.elements.add(flux);
     }
 
     network.cell.addElement(message.element);

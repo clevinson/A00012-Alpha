@@ -1,0 +1,20 @@
+{
+  "transitPosition": 0.7069998383522034,
+  "Flux": {
+    "mass": 0.8999999761581421,
+    "seperationDistance": 25,
+    "bondingDistance": 20,
+    "numberOfBonds": 4,
+    "affectRange": 50,
+    "vel": [
+      0,
+      0
+    ],
+    "relaxRange": 0.05000000074505806,
+    "seperationForce": 3,
+    "type": "Flux",
+    "affecAmount": 2
+  },
+  "returnAddress": "192.205.23.23",
+  "destination": "192.168.55.1"
+}

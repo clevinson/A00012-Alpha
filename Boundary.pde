@@ -37,4 +37,14 @@ class Boundary extends Element {
       return atan(v.y/v.x);
     } 
   }
+  
+  Vec2D getPosition(float theta) {
+    Vec2D v = new Vec2D(radius*cos(theta), radius*sin(theta));
+    v.y = -v.y; 
+    return v;
+  }
+  
+  Vec2D getNormalAtTheta(float theta) {
+    return new Vec2D(radius*cos(theta), radius*sin(theta)).getInverted();
+  }
 }

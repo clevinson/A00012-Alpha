@@ -35,6 +35,12 @@ void setup() {
 void draw() {
   
   networkIO.tick();
+  Boundary B = new Boundary(256, new Vec2D(width/2, height/2));
+  fill(255);
+  float theta = B.getTetha(new Vec2D(mouseX, mouseY));
+  text("Theta: " + theta + " Retrun: " , mouseX, mouseY);
+  
+  point( B.getPosition(theta).x,  -B.getPosition(theta).y);
   
   cell.step();
   render.render();
