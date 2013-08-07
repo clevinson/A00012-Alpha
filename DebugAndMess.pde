@@ -53,15 +53,6 @@ void keyPressed() {
  * METH...ODDS : crystals and oddity.  
  */
 
-Message fauxMessage(NetAddress destination, NetAddress returnAdress, float transitPosition, Element element){
-    Message message = new Message();
-    message.setDestination(destination);
-    message.setTransitPosition(transitPosition);
-    message.setElement(element);
-    message.setReturnAddress(returnAdress);
-    return message;
-}
-
 void pulkSeeder() {
   boolean foundNewPos = false;
   Vec2D   seedPosition = new Vec2D();

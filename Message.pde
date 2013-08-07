@@ -2,7 +2,7 @@ class Message {
   
   Element element;
   NetAddress destination;
-  NetAddress returnAddress;
+  NetAddress source;
   float transitPosition;
 
   Message(){
@@ -10,10 +10,10 @@ class Message {
   
   Message(String OscMessage) {
     JSONObject JSONMessage = JSONObject.parse(OscMessage);
-    destination = new NetAddress(JSONMessage.getString("destination"), JSONMessage.getInt("destinationPort"));
-    returnAddress = new NetAddress(JSONMessage.getString("returnAddress"), JSONMessage.getInt("returnPort"));
+    destination = new NetAddress(JSONMessage.getString("destinationAddress"), JSONMessage.getInt("destinationPort"));
+    source = new NetAddress(JSONMessage.getString("sourceAddress"), JSONMessage.getInt("sourcePort"));
     setDestination(destination);
-    setReturnAddress(returnAddress);
+    setSource(source);
     setTransitPosition(JSONMessage.getFloat("transitPosition"));
     
     if(JSONMessage.getJSONObject("element").getString("type").equals("Atom")) {
@@ -37,8 +37,8 @@ class Message {
     this.destination = dest;
   }
 
-  void setReturnAddress(NetAddress returnAddress){
-    this.returnAddress = returnAddress;
+  void setSource(NetAddress source){
+    this.source = source;
   }
 
   void setTransitPosition(float transPos){
@@ -49,7 +49,9 @@ class Message {
     JSONObject jsonMessage = new JSONObject();
     jsonMessage.setJSONObject("element", element.toJSON());
     jsonMessage.setString("destination", destination.address());
-    jsonMessage.setString("returnAddress", returnAddress.address());
+    jsonMessage.setInt("destinationPort", destination.port());
+    jsonMessage.setString("source", source.address());
+    jsonMessage.setInt("sourcePort", source.port());
     jsonMessage.setFloat("transitPosition", transitPosition);
     
     return jsonMessage;

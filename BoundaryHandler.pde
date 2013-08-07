@@ -20,7 +20,7 @@ class BoundaryHandler {
     message.setDestination(destination);
     message.setTransitPosition(transitPosition);
     message.setElement(element);
-    message.setReturnAddress(network.myAddress);
+    message.setSource(network.myAddress);
     network.toOutQueue(message);
   }
 
