@@ -7,7 +7,26 @@ class Message {
 
   Message(){
   }
-
+  
+  Message(String OscMessage) {
+    JSONObject JSONMessage = JSONObject.parse(OscMessage);
+    setDestination(JSONMessage.getString("destination"));
+    setReturnAddress(JSONMessage.getString("returnAddress"));
+    setTransitPosition(JSONMessage.getFloat("transitPosition"));
+    
+    if(JSONMessage.getJSONObject("element").getString("type").equals("Atom")) {
+      Atom atom = new Atom(JSONMessage.getJSONObject("element"));
+      setElement((Element) atom);
+    }
+    
+    if(JSONMessage.getJSONObject("element").getString("type").equals("Flux")) {
+      Flux flux = new Flux(JSONMessage.getJSONObject("element"));
+      setElement((Element) flux);
+    }
+    
+    println("The OscMessage is corrupt, or the message class does not how to handle it.");
+  }
+  
   void setElement(Element element){
     this.element = element;
   } 
@@ -33,5 +52,7 @@ class Message {
     
     return jsonMessage;
   }
-
+  
+  void fromJSON(JSONObject string) {
+  }
 }

@@ -12,7 +12,7 @@ class Render{
   
   void render() {
     
-    boolean mouseNavigation = true;
+    boolean mouseNavigation = false;
     boolean fluxLines = false;
         
     noStroke();
@@ -26,24 +26,19 @@ class Render{
       scale( scale );
     }
     
-    for( Element e : cell.elements ) {
+    for(Element e : cell.elements) {
       
-      if(e.type.equals( "Atom" )) {
-        strokeWeight( 4 );
-        stroke( 252, 191, 33 );
-        point( ((Atom) e).pos.x, ((Atom) e).pos.y);
+      if(e.type.equals("Atom")) {
+        strokeWeight(4);
+        stroke(252, 191, 33);
+        point(((Atom) e).pos.x, ((Atom) e).pos.y);
       }
       
-      if(e.type.equals( "Boundary" )) {
-          strokeWeight( 3 );
-          stroke( 252 );
-          noFill();
-          java.util.List vertices = ((Boundary) e).shape.computeVertices( ((Boundary) e).detail );
-          for(Iterator i=vertices.iterator(); i.hasNext(); ) {
-            Vec2D v=(Vec2D)i.next();
-            point(v.x + random( -((Boundary) e).thickness * 0.5, ((Boundary) e).thickness ) * 0.5, v.y + random( -((Boundary) e).thickness * 0.5, ((Boundary) e).thickness * 0.5 ) );
-            point(v.x + random( -((Boundary) e).thickness, ((Boundary) e).thickness ), v.y + random( -((Boundary) e).thickness, ((Boundary) e).thickness ) );
-          }
+      if(e.type.equals("Boundary")) {
+        Boundary sb = (Boundary) e;
+        stroke(255);
+        strokeWeight(4);
+        ellipse(sb.pos.x, sb.pos.y, sb.radius*2, sb.radius*2);
       }
       
       if(e.type.equals( "Flux" )) {        

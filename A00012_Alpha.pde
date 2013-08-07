@@ -1,4 +1,3 @@
-
 import toxi.geom.*;
 import toxi.math.waves.*;
 import toxi.math.noise.*;
@@ -10,7 +9,7 @@ Cell      cell;
 Render    render;
 NetworkIO networkIO;
 Graphview graphview;
-String  gui;  // Scene, Graph
+String    gui;  // Scene, Graph
 
 void setup() {
    size(1024, 800);
@@ -29,19 +28,13 @@ void setup() {
    render = new Render(cell);
    
    // Element mix list.
-   createBoundary();
-   createFluxObject( 1000, 4, 20 );
-   
-   
+   cell.elements.add(new Boundary(256, new Vec2D(width/2, height/2)));
+   //createFluxObject( 1000, 4, 20 );
 }
 
 void draw() {
   
   cell.step();
   render.render();
-  
-  // debug 50r20phics
-  if( false ) {
-    if( false ) fill(255); text( "FRAMERATE: " + frameRate, 50, 50 );
-  }
+
 }

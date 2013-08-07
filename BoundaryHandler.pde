@@ -27,16 +27,11 @@ class BoundaryHandler {
   void receive(Message message) {  // Must be debuged
     if (message.element.type.equals("Atom")) {
       Atom atom = (Atom) message.element;
-      atom.pos = parent.linearToWorldPosition(message.transitPosition);
-      atom.vel.set(atom.pos.getInverted().normalizeTo(atom.vel.magnitude()));  // Temporary Velocity handling
-      atom.pos.add(atom.vel.getNormalizedTo(parent.thickness*2));
     }
     if (message.element.type.equals("Flux")) {
       Flux flux = (Flux) message.element;
-      flux.pos = parent.linearToWorldPosition(message.transitPosition);
     }
 
     network.cell.addElement(message.element);
   }
 }
-
