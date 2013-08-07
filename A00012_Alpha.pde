@@ -28,8 +28,8 @@ void setup() {
    render = new Render(cell);
    
    // Element mix list.
-   cell.elements.add(new Boundary(256, new Vec2D(width/2, height/2)));
-   //createFluxObject( 1000, 4, 20 );
+   cell.elements.add(new Boundary(512, new Vec2D(width/2, height/2)));
+   createFluxObject( 100, 4, 20 );
 }
 
 void draw() {
