@@ -1,11 +1,21 @@
 class Cell{
 
   ArrayList<Element> elements;
+  ArrayList<Boundary> boundaries;
   ArrayList<Element> departingElements;
   
   Cell() {
     elements = new ArrayList<Element>();
+    boundaries = new ArrayList<Boundary>();
     departingElements = new ArrayList<Element>();
+  }
+  
+  Cell(float boundaryRadius) {
+    elements = new ArrayList<Element>();
+    boundaries = new ArrayList<Boundary>();
+    departingElements = new ArrayList<Element>();
+    
+    addBoundary(new Boundary(boundaryRadius, new Vec2D(width/2, height/2)));
   }
   
   void step() {
@@ -29,6 +39,11 @@ class Cell{
   
   void addElement(Element element) {
     elements.add(element);
+  }
+  
+  void addBoundary(Boundary boundary) {
+    elements.add(boundary);
+    boundaries.add(boundary);
   }
   
   void repotDepature(Element element) {

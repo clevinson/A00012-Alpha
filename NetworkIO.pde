@@ -4,45 +4,66 @@ import oscP5.*;
 import netP5.*;
 
 class NetworkIO{
-  
+
   Queue<Message> outQueue;
+  Queue<Message> inQueue;
   Cell cell;
   OscP5 oscP5;
+  BoundaryHandler boundaryHandler;
 
-  
+
   NetAddress myAddress;
-  
+
   NetworkIO(){
-    
-  }
-  
-  NetworkIO(Cell cell){
-    this.cell = cell;
     oscP5 = new OscP5(this,12000);
     myAddress =  new NetAddress("127.0.0.1",12000);
     outQueue = new LinkedList<Message>();
+    inQueue = new LinkedList<Message>();
   }
-  
+
+  void setCell(Cell cell){
+    this.cell = cell;
+    boundaryHandler = cell.boundaries.get(0).handler;
+  }
+
   void toOutQueue(Message message){
     outQueue.offer(message);
   }
- 
+
+  void toInQueue(Message message){
+    inQueue.offer(message);
+  }
+
   void tick(){
     Message outMessage = outQueue.poll();
     if( outMessage != null){
       send(outMessage);
     }
+
+    Message inMessage = inQueue.poll();
+    if( inMessage != null){
+      boundaryHandler.receive(inMessage);
+    }
+
   }
-  
+
   void oscEvent(OscMessage theOscMessage) {
     print("### received an osc message.");
     print(" addrpattern: "+theOscMessage.addrPattern());
     println(" typetag: "+theOscMessage.typetag());
     println(" val: "+theOscMessage.get(0));
   }
-  
+
   void oscEventTry1(OscMessage theOscMessage) {
-    
+    if(theOscMessage.addrPattern() == "/test"){
+      if(theOscMessage.typetag() == "s"){
+        toInQueue(new Message(theOscMessage.get(0).stringValue()));
+      }else{
+        println("[ERROR] Received unknown typetag: " + theOscMessage.typetag() + " for OSC message " + theOscMessage.addrPattern());
+      }
+    }else{
+      println("[ERROR] Received unknown OSC message with address pattern: " + theOscMessage.addrPattern());
+    }
   }
 
   void send(Message message){

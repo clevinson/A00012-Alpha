@@ -12,7 +12,7 @@ Graphview graphview;
 String    gui;  // Scene, Graph
 
 void setup() {
-   size(1024, 800);
+   size(800, 600);
    background(3, 7, 10);
    frameRate(60);
    addMouseWheelListener(new MouseWheelListener() { 
@@ -23,25 +23,21 @@ void setup() {
    gui = "Scene";
    graphview = new Graphview();
    
-   cell   = new Cell();
-   networkIO = new NetworkIO(cell);
+   networkIO = new NetworkIO();
+   cell   = new Cell(256);
+   networkIO.setCell(cell);
+
    render = new Render(cell);
    
    // Element mix list.
-   cell.elements.add(new Boundary(512, new Vec2D(width/2, height/2)));
    createFluxObject( 100, 4, 20 );
 }
 
 void draw() {
   
   networkIO.tick();
-  Boundary B = new Boundary(256, new Vec2D(width/2, height/2));
   fill(255);
-  float theta = B.getTetha(new Vec2D(mouseX, mouseY));
-  text("Theta: " + theta + " Retrun: " , mouseX, mouseY);
-  
-  point( B.getPosition(theta).x,  -B.getPosition(theta).y);
-  
+    
   cell.step();
   render.render();
 
