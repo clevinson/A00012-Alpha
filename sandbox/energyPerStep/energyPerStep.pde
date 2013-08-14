@@ -23,6 +23,8 @@ void setup() {
   cell = new Cell();
   cell.addElements(200);
   
+  energyMonitor = new 
+  
   processingCapacity = 0;// how to find processing capcity?
   paceTimeObserver = 60; // Measure in Hertz
   totalEnergyPerStep = processingCapacity / paceTimeObserver;

@@ -32,7 +32,6 @@ class Boundary extends Element {
   
   float getTetha(Vec2D elementPos) {
     Vec2D v = elementPos.sub(pos);
-    
     return atan2(v.x, v.y);
   }
   
@@ -43,6 +42,6 @@ class Boundary extends Element {
   }
   
   Vec2D getNormalAtTheta(float theta) {
-    return new Vec2D(radius*cos(theta - HALF_PI), radius*sin(theta - HALF_PI)).normalize().scaleSelf(-1,1);
+    return new Vec2D(radius*cos(theta - HALF_PI), radius*sin(theta - HALF_PI)).normalize().scaleSelf(-1,1).getInverted();
   }
 }
