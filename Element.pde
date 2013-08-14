@@ -6,10 +6,14 @@
     type = "Element";
   }
   
-  void reactWith(Element element) { 
+  void reactWith(Element element) {
   }
   
   void act() {
+  }
+  
+  void depart() {
+    
   }
   
   JSONObject toJSON() {

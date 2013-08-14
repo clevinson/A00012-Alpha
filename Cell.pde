@@ -29,7 +29,10 @@ class Cell{
     }
     
     for(Element e : departingElements) {
-      if(elements.contains(e)) elements.remove(e);
+      if(elements.contains(e)) {
+        e.depart();
+        elements.remove(e);
+      }
     }
     
     for( Element e : elements) {

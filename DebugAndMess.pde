@@ -39,6 +39,10 @@ void keyPressed() {
     Element e = new Atom( new Vec2D( mouseX, mouseY ), new Vec2D( random( -2, 2 ), random( -2, 2 ) ) );
     cell.addElement( e );
   }
+  if( key=='f' ) {
+    Flux f = new Flux(new Vec2D(mouseX, mouseY));
+    cell.addElement(f);
+  }
   if( key=='p' ) {
     cell.elements.add( new Pulk( new Vec2D( mouseX, mouseY ) ) );
   }
@@ -93,21 +97,8 @@ void pulkSeeder() {
 void createFluxObject( int amount, int numberOfNeighbours, float bondingDistance ) {
   ArrayList<Flux> scatteredPoints = new ArrayList<Flux>();
   if( true ) for( int n=0; n < amount; n++ ) scatteredPoints.add( new Flux(new Vec2D(random(200, width-200), random(200, height-200))) );
-  if( false ) {
-    for( int x=0; x < sqrt(amount); x++ ) {
-      for( int y=0; y < sqrt(amount); y++ ) {
-       scatteredPoints.add( new Flux( new Vec2D( 50 + x * ( bondingDistance - 1 ) , 50 + y * ( bondingDistance - 1 ) ) ) );
-      }
-    }
-    for( Flux f1 : scatteredPoints ) {
-      for( Flux f2 : scatteredPoints ) {
-        if( f1.pos.distanceTo(f2.pos) < bondingDistance ) {
-          f1.neighbours.add(f2);
-        }
-      } 
-    }
-  }
   for( Flux f : scatteredPoints ) {
+    println(f.pos);
     cell.elements.add(f);
   }
 }

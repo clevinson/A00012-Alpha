@@ -30,13 +30,14 @@ void setup() {
    render = new Render(cell);
    
    // Element mix list.
-   createFluxObject( 100, 4, 20 );
+   // createFluxObject( 20, 4, 20 );
 }
 
 void draw() {
     
   networkIO.tick();
   cell.step();
+  cell.debugCountElements(cell.elements);
   render.render();
 
 }

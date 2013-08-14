@@ -13,7 +13,7 @@ class Render{
   void render() {
     
     boolean mouseNavigation = false;
-    boolean fluxLines = false;
+    boolean fluxLines = true;
         
     noStroke();
     fill(3, 7, 10, 100); 
@@ -41,16 +41,16 @@ class Render{
         ellipse(sb.pos.x, sb.pos.y, sb.radius*2, sb.radius*2);
       }
       
-      if(e.type.equals( "Flux" )) {        
+      if(e.type.equals( "Flux" )) {   
         strokeWeight(1);
-        stroke(255);
+        stroke(255,0,0);
         if( fluxLines ) {
-          for( Flux f : ((Flux) e).neighbours ) {
+          for( Flux f : ((Flux) e).bonds ) {
             line( f.pos.x, f.pos.y, ((Flux) e).pos.x, ((Flux) e).pos.y );
           }
         }
         strokeWeight(2);
-        stroke(230);
+        stroke(230,0,0);
         point( ((Flux) e).pos.x, ((Flux) e).pos.y );
         line( ((Flux) e).pos.x, 
               ((Flux) e).pos.y, 

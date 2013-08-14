@@ -10,10 +10,11 @@ class Flux extends Element {
   float seperationDistance, seperationForce;
   float bondingDistance, numberOfBonds;
   
-  ArrayList<Flux> neighbours;
-  Vec2D avgNeighPos;
+  ArrayList<Flux> bonds;
+  Vec2D avgBondPos;
   
   Flux(Vec2D position) {
+    
     mass         = 0.9;
     relaxRange   = 0.05; // Not in pixel units ( lower = longer range );
     affectRange  = 50;  // In normal units
@@ -27,8 +28,8 @@ class Flux extends Element {
     pos = position;
     vel = new Vec2D(0,0);
     acc = new Vec2D(0,0);
-    avgNeighPos = new Vec2D();
-    neighbours = new ArrayList<Flux>();
+    avgBondPos = new Vec2D(0,0);
+    bonds = new ArrayList<Flux>();
   }
   
   Flux(JSONObject flux) {  
@@ -45,14 +46,15 @@ class Flux extends Element {
     pos  = new Vec2D();
     vel  = new Vec2D( flux.getJSONArray("vel").getFloat(0), flux.getJSONArray("vel").getFloat(1));
     acc  = new Vec2D();
-    avgNeighPos = new Vec2D();
-    neighbours = new ArrayList<Flux>();
+    avgBondPos = new Vec2D();
+    bonds = new ArrayList<Flux>();
     
   }
   
   void reactWith(Element element) {
-    if(element.type.equals("Atom")) reactWithAtom((Atom) element);
-    if(element.type.equals("Flux")) reactWithFlux((Flux) element);
+      if(element.type.equals("Atom")) reactWithAtom((Atom) element);
+      if(element.type.equals("Boundary")) reactWith((Boundary) element);
+      if(element.type.equals("Flux")) reactWithFlux((Flux) element);
   }
   
   void reactWithAtom(Atom atom) {
@@ -63,35 +65,46 @@ class Flux extends Element {
     }
   }
   
+  void reactWithBoundary(Boundary boundary) {
+    boundary.reactWithFlux(this);
+  }
+  
   void reactWithFlux(Flux flux) {
     if(flux.pos.distanceTo(pos) < bondingDistance) {
-      if( !neighbours.contains(flux) ) {
-        addNeighbour(flux);
-        flux.addNeighbour(this);
+      if( !bonds.contains(flux) ) {
+        addBond(flux);
+        flux.addBond(this);
       }
     }
   }
   
   void act() {
-    updateNeighRelation();
+    updateBondRelation();
     updateMovement();
   }
   
-  void updateNeighRelation() {
-    avgNeighPos = new Vec2D();
-    for(Flux neigh : neighbours) {
-      avgNeighPos.addSelf(neigh.pos);
-      if( seperationFunction(pos.distanceTo(neigh.pos)) > 0.01 ) {
-        Vec2D dir = pos.sub(neigh.pos).normalize();
-        vel.addSelf(dir.scale(seperationFunction(pos.distanceTo(neigh.pos))));
+  void depart() {
+    breakAllBonds();
+  }
+  
+  void updateBondRelation() {
+    avgBondPos = new Vec2D();
+    if(bonds.size() > 0) {
+      for(Flux bond : bonds) {
+        avgBondPos.addSelf(bond.pos);
+        if( seperationFunction(pos.distanceTo(bond.pos)) > 0.01 ) {
+          Vec2D dir = pos.sub(bond.pos).normalize();
+          vel.addSelf(dir.scale(seperationFunction(pos.distanceTo(bond.pos))));
+        }
       }
+      avgBondPos.scaleSelf( 1 / (float)bonds.size() );
     }
-    avgNeighPos.scaleSelf( 1 / (float)neighbours.size() );
   }
   
   void updateMovement() {
-    Vec2D dir = avgNeighPos.sub(pos).normalize();
-    acc = dir.scale(relaxFunction( pos.distanceTo(avgNeighPos)) );
+    Vec2D dir = avgBondPos.sub(pos).normalize();  
+    if(avgBondPos.isZeroVector()) dir.clear();
+    acc = dir.scale(relaxFunction( pos.distanceTo(avgBondPos)) );
     vel.addSelf(acc);
     vel.scaleSelf(mass);
     vel.limit(2);
@@ -99,22 +112,35 @@ class Flux extends Element {
     acc.clear();
   }
   
-  void addNeighbour(Flux flux) {
-    if( !neighbours.contains(flux) ) {
-      neighbours.add(flux);
-      if(neighbours.size() > numberOfBonds) {
+  void addBond(Flux flux) {
+    if( !bonds.contains(flux) ) {
+      bonds.add(flux);
+      if(bonds.size() > numberOfBonds) {
         Flux furtherst = flux;
         float maxdist = 0;
-        for(Flux f : neighbours) {
+        for(Flux f : bonds) {
           float fdist = pos.distanceTo(f.pos);
           if(fdist > maxdist) {
             maxdist = fdist;
             furtherst = f;
           }
         }
-        neighbours.remove(furtherst);
+        bonds.remove(furtherst);
       }
     }
+  }
+  
+  void removeBond(Flux flux) {
+    bonds.remove(flux);
+  }
+  
+  void breakAllBonds() {
+    for(Flux bond : bonds) {
+      println("Before: " + bond.bonds.contains(this));
+      bond.removeBond(this);
+      println("After: " + bond.bonds.contains(this));
+    }
+    bonds.clear();
   }
   
   float relaxFunction(float x) {

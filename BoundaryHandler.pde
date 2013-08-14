@@ -23,14 +23,12 @@ class BoundaryHandler {
       Atom atom = (Atom) message.element;
       atom.pos = parent.getPosition(message.transitPosition);
       atom.vel = atom.vel.getInverted();
-      //atom.vel = parent.getNormalAtTheta(message.transitPosition).normalizeTo(atom.vel.magnitude());
       atom.pos.addSelf(atom.vel); 
     }
     if (message.element.type.equals("Flux")) {
       Flux flux = (Flux) message.element;
       flux.pos = parent.getPosition(message.transitPosition);
       flux.vel = flux.vel.getInverted();
-      //flux.vel = parent.getNormalAtTheta(message.transitPosition).normalizeTo(flux.vel.magnitude());
       flux.pos.addSelf(flux.vel);   
     }
     cell.addElement(message.element);
