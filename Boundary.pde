@@ -38,10 +38,12 @@ class Boundary extends Element {
   Vec2D getPosition(float theta) {
     Vec2D v = new Vec2D(radius*cos(theta - HALF_PI), radius*sin(theta - HALF_PI ));
     v.y = -v.y; 
-    return v;
+    return v.addSelf(pos);
   }
   
   Vec2D getNormalAtTheta(float theta) {
-    return new Vec2D(radius*cos(theta - HALF_PI), radius*sin(theta - HALF_PI)).normalize().scaleSelf(-1,1).getInverted();
+    Vec2D v = new Vec2D(cos(theta - HALF_PI), sin(theta - HALF_PI));
+    v.y = -v.y;
+    return v.getInverted();
   }
 }

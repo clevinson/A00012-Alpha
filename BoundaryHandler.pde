@@ -23,7 +23,7 @@ class BoundaryHandler {
       Atom atom = (Atom) message.element;
       atom.pos = parent.getPosition(message.transitPosition);
       atom.vel = parent.getNormalAtTheta(message.transitPosition).normalizeTo(atom.vel.magnitude());
-      atom.pos.addSelf(atom.vel);      
+      atom.pos.addSelf(vel); 
     }
     if (message.element.type.equals("Flux")) {
       Flux flux = (Flux) message.element;
