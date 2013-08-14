@@ -1,5 +1,5 @@
 class Flux extends Element {
-
+  
   Vec2D pos;
   Vec2D vel;
   Vec2D acc;

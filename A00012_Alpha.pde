@@ -30,7 +30,7 @@ void setup() {
    render = new Render(cell);
    
    // Element mix list.
-   // createFluxObject( 100, 4, 20 );
+   createFluxObject( 100, 4, 20 );
 }
 
 void draw() {
