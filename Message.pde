@@ -10,8 +10,8 @@ class Message {
   
   Message(String OscMessage) {
     JSONObject JSONMessage = JSONObject.parse(OscMessage);
-    destination = new NetAddress(JSONMessage.getString("destinationAddress"), JSONMessage.getInt("destinationPort"));
-    source = new NetAddress(JSONMessage.getString("sourceAddress"), JSONMessage.getInt("sourcePort"));
+    destination = new NetAddress(JSONMessage.getString("destination"), JSONMessage.getInt("destinationPort"));
+    source = new NetAddress(JSONMessage.getString("source"), JSONMessage.getInt("sourcePort"));
     setDestination(destination);
     setSource(source);
     setTransitPosition(JSONMessage.getFloat("transitPosition"));
@@ -19,14 +19,12 @@ class Message {
     if(JSONMessage.getJSONObject("element").getString("type").equals("Atom")) {
       Atom atom = new Atom(JSONMessage.getJSONObject("element"));
       setElement((Element) atom);
-    }
-    
-    if(JSONMessage.getJSONObject("element").getString("type").equals("Flux")) {
+    } else if(JSONMessage.getJSONObject("element").getString("type").equals("Flux")) {
       Flux flux = new Flux(JSONMessage.getJSONObject("element"));
       setElement((Element) flux);
+    } else {
+      println("The OscMessage is corrupt, or the message class does not how to handle it.");
     }
-    
-    println("The OscMessage is corrupt, or the message class does not how to handle it.");
   }
   
   void setElement(Element element){

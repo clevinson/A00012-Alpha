@@ -13,11 +13,13 @@ class Cell {
   }
   
   void step() {
+    long measureNano = System.nanoTime();
     for(Element e1 : elements) {
       for(Element e2 : elements) {
         e1.reactWith(e2);
       }
     }
+    actualEnergyUsedPerStep = System.nanoTime() - measureNano;
   }
   
   void render() {

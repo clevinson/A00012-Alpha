@@ -10,7 +10,7 @@ class Boundary extends Element {
     handler = new BoundaryHandler(this);
     this.radius = radius;
     this.pos = pos;
-    heaven = new NetAddress("192.168.55.10",12000);
+    heaven = new NetAddress("192.168.55.35",12000);
   }
   
   void reactWith(Element element) {

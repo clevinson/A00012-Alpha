@@ -21,15 +21,13 @@ class BoundaryHandler {
   void receive(Message message) {  // Must be debuged
     if (message.element.type.equals("Atom")) {
       Atom atom = (Atom) message.element;
-      atom.pos = parent.getPosition(message.transitPosition);
+      atom.pos = new Vec2D(width/2, height/2); //parent.getPosition(message.transitPosition);
       atom.vel = parent.getNormalAtTheta(message.transitPosition).normalizeTo(atom.vel.magnitude());      
-      cell.elements.add(atom);
     }
     if (message.element.type.equals("Flux")) {
       Flux flux = (Flux) message.element;
       flux.pos = parent.getPosition(message.transitPosition);
       flux.vel = parent.getNormalAtTheta(message.transitPosition).normalizeTo(flux.vel.magnitude());   
-      cell.elements.add(flux);
     }
     cell.addElement(message.element);
   }
