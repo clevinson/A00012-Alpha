@@ -12,10 +12,6 @@
   void act() {
   }
   
-  void depart() {
-    
-  }
-  
   JSONObject toJSON() {
     return new JSONObject();
   }

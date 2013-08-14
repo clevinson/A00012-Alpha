@@ -30,7 +30,6 @@ class Cell{
     
     for(Element e : departingElements) {
       if(elements.contains(e)) {
-        e.depart();
         elements.remove(e);
       }
     }

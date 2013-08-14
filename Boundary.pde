@@ -26,6 +26,7 @@ class Boundary extends Element {
   
   void reactWithFlux(Flux flux) {
     if(flux.pos.distanceTo(pos) >= radius) {
+      flux.isGhost = true;
       handler.send(heaven, flux, getTetha(flux.pos));
     }
   }

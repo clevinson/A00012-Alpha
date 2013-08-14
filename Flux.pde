@@ -13,6 +13,8 @@ class Flux extends Element {
   ArrayList<Flux> bonds;
   Vec2D avgBondPos;
   
+  boolean isGhost;
+  
   Flux(Vec2D position) {
     
     mass         = 0.9;
@@ -30,6 +32,8 @@ class Flux extends Element {
     acc = new Vec2D(0,0);
     avgBondPos = new Vec2D(0,0);
     bonds = new ArrayList<Flux>();
+    
+    isGhost = false;
   }
   
   Flux(JSONObject flux) {  
@@ -88,6 +92,7 @@ class Flux extends Element {
   }
   
   void updateBondRelation() {
+    breakAllGhostBonds();
     avgBondPos = new Vec2D();
     if(bonds.size() > 0) {
       for(Flux bond : bonds) {
@@ -113,7 +118,7 @@ class Flux extends Element {
   }
   
   void addBond(Flux flux) {
-    if( !bonds.contains(flux) ) {
+    if( !bonds.contains(flux) && !flux.isGhost ) {
       bonds.add(flux);
       if(bonds.size() > numberOfBonds) {
         Flux furtherst = flux;
@@ -141,6 +146,14 @@ class Flux extends Element {
       println("After: " + bond.bonds.contains(this));
     }
     bonds.clear();
+  }
+  
+  void breakAllGhostBonds() {
+    Iterator<Flux> i = bonds.iterator();
+    while(i.hasNext()) {
+      Flux f = i.next();
+      if(f.isGhost) i.remove();
+    }
   }
   
   float relaxFunction(float x) {
