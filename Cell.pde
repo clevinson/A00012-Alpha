@@ -40,13 +40,13 @@ class Cell{
   void addElement(Element element) {
     elements.add(element);
   }
-  
+
   void addBoundary(Boundary boundary) {
     elements.add(boundary);
     boundaries.add(boundary);
   }
-  
-  void repotDepature(Element element) {
+
+  void reportDepature(Element element) {
     departingElements.add(element);
   }
   

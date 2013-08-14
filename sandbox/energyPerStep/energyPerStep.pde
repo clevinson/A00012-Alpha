@@ -4,6 +4,12 @@ import org.gwoptics.graphics.graph2D.Graph2D;
 import org.gwoptics.graphics.graph2D.traces.ILine2DEquation;
 import org.gwoptics.graphics.graph2D.traces.RollingLine2DTrace;
 
+import java.lang.management.ClassLoadingMXBean;
+import java.lang.management.ManagementFactory;
+import java.lang.management.MemoryPoolMXBean;
+import java.lang.management.MemoryUsage;
+import java.lang.management.ThreadMXBean;
+
 int processingCapacity;
 int paceTimeObserver;
 int totalEnergyPerStep;
@@ -11,12 +17,16 @@ int actualEnergyUsedPerStep;
 
 
 ComputerMonitor computerMonitor;
+Cell cell;
 
 void setup() {
-  size(640, 640);
+  size(1280, 720);
   
   computerMonitor = new ComputerMonitor(this);
-    
+  
+  cell = new Cell();
+  cell.addElements(200);
+  
   processingCapacity = 0;// how to find processing capcity?
   paceTimeObserver = 60; // Measure in Hertz
   totalEnergyPerStep = processingCapacity / paceTimeObserver;
@@ -24,125 +34,136 @@ void setup() {
 }
 
 void draw() {
-  background(125);
-  
+  background(200);
+  cell.step();
+  cell.render();
   computerMonitor.drawOnScreen();
-  // To make visible if the program freezes or not.
-  ellipse(mouseX, mouseY, 5, 5);
+    computerMonitor.printToConsole();
 }
 
 void mousePressed() {
-  computerMonitor.printToConsole();
+
+}
+ 
+void mouseDragged() {
+  cell.addElements(10);
 }
 
 class ComputerMonitor {
   
   PApplet parent;
+  
+  String pid;
   Sigar sigar;
   Mem mem;
   Cpu cpu;
+  ThreadCpu threadCpu;
+  ProcTime procTime;
+  ProcCpu procCpu;
   CpuPerc perc;
   CpuPerc[] cpuPercs; 
   
   RollingLine2DTrace cpuCombined;
-  RollingLine2DTrace r,r2,r3;
-  Graph2D g;
+  Graph2D graph;
     
   ComputerMonitor(PApplet parent) {
       this.parent = parent;
+      
+      /* SIGAR */
       sigar = new Sigar();
-      mem = new Mem();
-      cpu = new Cpu();
+      
+      /* ManagementFactory */ 
+      pid = ManagementFactory.getRuntimeMXBean().getName();
+      
+      loadCpuObjects();
       
       /* Graphing */ 
-      cpuCombined = new RollingLine2DTrace(new eq(), 100, 0.01f);
+      cpuCombined = new RollingLine2DTrace(new cpuCombined(), 5, 0.002f);
       cpuCombined.setTraceColour(255, 0, 0);
-      cpuCombined.setLineWidth(3);
-      
-      r  = new RollingLine2DTrace(new eq() ,100,0.1f);
-      r.setTraceColour(0, 255, 0);
-      
-      r2 = new RollingLine2DTrace(new eq2(),100,0.1f);
-      r2.setTraceColour(255, 0, 0);
-      
-      r3 = new RollingLine2DTrace(new eq3(),100,0.1f);
-      r3.setTraceColour(0, 0, 255);
+      cpuCombined.setLineWidth(1);
        
-      g = new Graph2D(parent, 400, 200, false);
-      g.setYAxisMax(600);
-      g.addTrace(r);
-      g.addTrace(r2);
-      g.addTrace(r3);
-      g.position.y = 50;
-      g.position.x = 100;
-      g.setYAxisTickSpacing(100);
-      g.setXAxisMax(5f);
+      graph = new Graph2D(parent, 1100, 500, false);
+      graph.setYAxisMax(1);
+      graph.setYAxisLabel("CPU Usage");
+      graph.addTrace(cpuCombined);
+      graph.position.y = 100;
+      graph.position.x = 100;
+      graph.setYAxisTickSpacing(0.1);
+      graph.setXAxisMax(5f);
   }
   
   void drawOnScreen() {
-    g.draw();
+    graph.draw();
   }
   
   void printToConsole() {
-    try {
-      cpu = sigar.getCpu();
-    }
-    catch (SigarException se) {
-      se.printStackTrace();
-    }
-    System.out.println("CPU DETAILS");
-    System.out.println("idle: " + cpu.getIdle());//get overall CPU idle
-    System.out.println("irq: " + cpu.getIrq());
-    System.out.println("nice: " + cpu.getNice());
-    System.out.println("soft irq: " + cpu.getSoftIrq());
-    System.out.println("stolen: " + cpu.getStolen());
-    System.out.println("sys: " + cpu.getSys());
-    System.out.println("total: " + cpu.getTotal());
-    System.out.println("user: " + cpu.getUser());
-    System.out.println();
-  
-    try {
-      perc = sigar.getCpuPerc();
-    } catch (SigarException se) {
-      se.printStackTrace();
+    loadCpuObjects();
+        
+    println(pid);
+    println(sigar.getPid());
+    println(procCpu.toString());
+    
+    if(false) {
+      System.out.println(cpu.toString());
+      System.out.println(procTime.toString());
+      System.out.println(perc.toString());
     }
     
-    System.out.println("OVERALL CPU USAGE");
-    System.out.println("system idle: " + perc.getIdle());//get current CPU idle rate
-    System.out.println("conbined: "+ perc.getCombined());//get current CPU usage
-    
-    try {
-      cpuPercs = sigar.getCpuPercList();
-    } catch (SigarException se) {
-      se.printStackTrace();
+    if(false) {
+      System.out.println("\nEACH CPU USAGE");
+      for (CpuPerc cpuPerc : cpuPercs) {
+        System.out.println(cpuPerc.toString());//get current CPU idle rate
+      }
     }
     
-    System.out.println("\nEACH CPU USAGE");
-    for (CpuPerc cpuPerc : cpuPercs) {
-      System.out.println("system idle: " + cpuPerc.getIdle());//get current CPU idle rate
-      System.out.println("conbined: "+ cpuPerc.getCombined());//get current usage
-      System.out.println();
+    System.out.println("\n\n\n\n");
+  }
+  
+  void loadCpuObjects() {
+    
+      pid = ManagementFactory.getRuntimeMXBean().getName();
+      
+      try {
+        cpu = sigar.getCpu();
+      } catch (SigarException se) {
+        se.printStackTrace();
+      }
+      
+      try {
+        procCpu = sigar.getProcCpu( sigar.getPid() );
+      } catch (SigarException se) {
+        se.printStackTrace();
+      }
+      
+      try {
+        procTime = sigar.getProcTime( sigar.getPid() );
+      } catch (SigarException se) {
+        se.printStackTrace();
+      }
+      
+      try {
+        threadCpu = sigar.getThreadCpu();
+      } catch (SigarException se) {
+        se.printStackTrace();
+      }
+      
+      try {
+        perc = sigar.getCpuPerc();
+      } catch (SigarException se) {
+        se.printStackTrace();
+      }
+      
+      try {
+        cpuPercs = sigar.getCpuPercList();
+      } catch (SigarException se) {
+        se.printStackTrace();
+      }
+  }
+  
+  class cpuCombined implements ILine2DEquation{
+    public double computePoint(double x, int pos) {
+      loadCpuObjects();
+      return threadCpu.getTotal();
     }
-  }
-
-  class eq implements ILine2DEquation{
-    public double computePoint(double x,int pos) {
-      return mouseX;
-    }    
-  }
-  
-  class eq2 implements ILine2DEquation{
-    public double computePoint(double x,int pos) {
-      return mouseY;
-    }    
-  }
-  
-  class eq3 implements ILine2DEquation{
-    public double computePoint(double x,int pos) {
-      if(mousePressed)
-        return 400;
-      else
-        return 0;
-    }    
   }
 }
