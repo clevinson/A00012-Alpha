@@ -20,7 +20,7 @@ class Boundary extends Element {
   
   void reactWithAtom(Atom atom) {
     if(atom.pos.distanceTo(pos) >= radius) {
-      handler.sendDebug(atom, getTetha(atom.pos));
+      handler.send(heaven, atom, getTetha(atom.pos));
     }
   }
   
@@ -32,20 +32,17 @@ class Boundary extends Element {
   
   float getTetha(Vec2D elementPos) {
     Vec2D v = elementPos.sub(pos);
-    if(v.x >= 0) {
-      return -atan(v.y/v.x);
-    } else {
-      return atan(v.y/v.x);
-    } 
+    
+    return atan2(v.x, v.y);
   }
   
   Vec2D getPosition(float theta) {
-    Vec2D v = new Vec2D(radius*cos(theta), radius*sin(theta));
+    Vec2D v = new Vec2D(radius*cos(theta - HALF_PI), radius*sin(theta - HALF_PI ));
     v.y = -v.y; 
     return v;
   }
   
   Vec2D getNormalAtTheta(float theta) {
-    return new Vec2D(radius*cos(theta), radius*sin(theta)).getInverted();
+    return new Vec2D(radius*cos(theta - HALF_PI), radius*sin(theta - HALF_PI)).normalize().scaleSelf(-1,1);
   }
 }

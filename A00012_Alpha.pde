@@ -29,19 +29,12 @@ void setup() {
    
    // Element mix list.
    cell.elements.add(new Boundary(512, new Vec2D(width/2, height/2)));
-   createFluxObject( 100, 4, 20 );
+   createFluxObject( 200, 4, 20 );
 }
 
 void draw() {
   
   networkIO.tick();
-  Boundary B = new Boundary(256, new Vec2D(width/2, height/2));
-  fill(255);
-  float theta = B.getTetha(new Vec2D(mouseX, mouseY));
-  text("Theta: " + theta + " Retrun: " , mouseX, mouseY);
-  
-  point( B.getPosition(theta).x,  -B.getPosition(theta).y);
-  
   cell.step();
   render.render();
 

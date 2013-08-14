@@ -8,13 +8,6 @@ class BoundaryHandler {
     network = networkIO;
   }
 
-  void sendDebug(Element element, float transitPosition) {
-    cell.repotDepature(element);
-    print( "Element \"" );
-    println( element + "\" of type \"" + element.type + "\" left boundary \"" + parent + "\" at position " + transitPosition );
-    // When added to put queue of the NetworkIO the element gets added to a list of leaving element;
-  }
-
   void send(NetAddress destination, Element element, float transitPosition) {
     Message message = new Message();
     message.setDestination(destination);
@@ -22,21 +15,22 @@ class BoundaryHandler {
     message.setElement(element);
     message.setSource(network.myAddress);
     network.toOutQueue(message);
+    cell.reportDepature(element);
   }
 
   void receive(Message message) {  // Must be debuged
     if (message.element.type.equals("Atom")) {
       Atom atom = (Atom) message.element;
-      
-      //atom.vel.set( tan(
-      
+      atom.pos = parent.getPosition(message.transitPosition);
+      atom.vel = parent.getNormalAtTheta(message.transitPosition).normalizeTo(atom.vel.magnitude());      
       cell.elements.add(atom);
     }
     if (message.element.type.equals("Flux")) {
       Flux flux = (Flux) message.element;
+      flux.pos = parent.getPosition(message.transitPosition);
+      flux.vel = parent.getNormalAtTheta(message.transitPosition).normalizeTo(flux.vel.magnitude());   
       cell.elements.add(flux);
     }
-
-    network.cell.addElement(message.element);
+    cell.addElement(message.element);
   }
 }

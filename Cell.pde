@@ -31,7 +31,7 @@ class Cell{
     elements.add(element);
   }
   
-  void repotDepature(Element element) {
+  void reportDepature(Element element) {
     departingElements.add(element);
   }
   

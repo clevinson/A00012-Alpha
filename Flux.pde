@@ -142,8 +142,6 @@ class Flux extends Element {
     JSONElement.setFloat("seperationForce", seperationForce);
     JSONElement.setFloat("bondingDistance", bondingDistance);
     JSONElement.setFloat("numberOfBonds", numberOfBonds);
-    println("vel.x: " + vel.x);
-    println("vel.y: " + vel.y);
     JSONElement.setJSONArray("vel", new JSONArray().setFloat(0, (float)vel.x).setFloat(1, (float)vel.y));
     return JSONElement;
   }
