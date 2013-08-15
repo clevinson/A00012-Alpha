@@ -43,14 +43,14 @@ class Render{
       
       if(e.type.equals( "Flux" )) {   
         strokeWeight(1);
-        stroke(255,0,0);
+        stroke(255);
         if( fluxLines ) {
           for( Flux f : ((Flux) e).bonds ) {
             line( f.pos.x, f.pos.y, ((Flux) e).pos.x, ((Flux) e).pos.y );
           }
         }
         strokeWeight(2);
-        stroke(230,0,0);
+        stroke(230);
         point( ((Flux) e).pos.x, ((Flux) e).pos.y );
         line( ((Flux) e).pos.x, 
               ((Flux) e).pos.y, 

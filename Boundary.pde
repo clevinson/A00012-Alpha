@@ -38,7 +38,10 @@ class Boundary extends Element {
   
   Vec2D getPosition(float theta) {
     Vec2D v = new Vec2D(radius*cos(theta - HALF_PI), radius*sin(theta - HALF_PI ));
-    v.y = -v.y; 
+    v.y = -v.y;
+    println(v); 
+    v = v.getInverted();
+    println(v);
     return v.addSelf(pos);
   }
   

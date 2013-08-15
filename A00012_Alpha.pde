@@ -12,7 +12,7 @@ Graphview graphview;
 String    gui;  // Scene, Graph
 
 void setup() {
-   size(800, 600);
+   size(1280, 720);
    background(3, 7, 10);
    frameRate(60);
    addMouseWheelListener(new MouseWheelListener() { 
@@ -28,16 +28,12 @@ void setup() {
    networkIO.setCell(cell);
 
    render = new Render(cell);
-   
-   // Element mix list.
-   // createFluxObject( 20, 4, 20 );
 }
 
 void draw() {
     
   networkIO.tick();
   cell.step();
-  cell.debugCountElements(cell.elements);
   render.render();
-
+  saveFrame("takeD/takeD_#####.png");
 }

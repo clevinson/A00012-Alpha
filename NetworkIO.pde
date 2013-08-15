@@ -46,14 +46,6 @@ class NetworkIO{
     }
 
   }
-/*
-  void oscEvent(OscMessage theOscMessage) {
-    print("### received an osc message.");
-    print(" addrpattern: "+theOscMessage.addrPattern());
-    println(" typetag: "+theOscMessage.typetag());
-    println(" val: "+theOscMessage.get(0));
-  }
-*/
 
   void oscEvent(OscMessage theOscMessage) {
     println("recieved message");
@@ -74,5 +66,7 @@ class NetworkIO{
     OscMessage oscMessage = new OscMessage("/test");
     oscMessage.add(message.serialize());
     oscP5.send(oscMessage, destination);
+    
+    oscEvent(oscMessage); // Loops into self. Debug only
   }
 }
