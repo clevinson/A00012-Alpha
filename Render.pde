@@ -8,6 +8,8 @@ class Render{
   
   void render() {
     
+    println(cell.capacityHandler.toString());
+    
     boolean mouseNavigation = false;
     boolean fluxLines = true;
     

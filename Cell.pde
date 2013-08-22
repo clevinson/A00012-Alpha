@@ -1,16 +1,20 @@
 class Cell{
 
+  CapacityHandler capacityHandler;
+  
   ArrayList<Element> elements;
   ArrayList<Boundary> boundaries;
   ArrayList<Element> departingElements;
   
   Cell() {
+    capacityHandler = new CapacityHandler();
     elements = new ArrayList<Element>();
     boundaries = new ArrayList<Boundary>();
     departingElements = new ArrayList<Element>();
   }
   
   Cell(float boundaryRadius) {
+    capacityHandler = new CapacityHandler();
     elements = new ArrayList<Element>();
     boundaries = new ArrayList<Boundary>();
     departingElements = new ArrayList<Element>();
@@ -19,6 +23,8 @@ class Cell{
   }
   
   void step() {
+    
+    capacityHandler.startCapacityMeasurement();
     
     for(int A=0; A < elements.size(); A++) {
       Element ElementA = (Element) elements.get(A);
@@ -37,6 +43,8 @@ class Cell{
     for( Element e : elements) {
       e.act();
     }
+    
+    capacityHandler.endCapacityMeasurement();
   }
   
   void addElement(Element element) {
