@@ -1,8 +1,8 @@
 class Flux extends Element {
   
-  Vec2D pos;
-  Vec2D vel;
-  Vec2D acc;
+  Vec3D pos;
+  Vec3D vel;
+  Vec3D acc;
   
   float mass;  
   float relaxRange;
@@ -11,11 +11,11 @@ class Flux extends Element {
   float bondingDistance, numberOfBonds;
   
   ArrayList<Flux> bonds;
-  Vec2D avgBondPos;
+  Vec3D avgBondPos;
   
   boolean isGhost;
   
-  Flux(Vec2D position) {
+  Flux(Vec3D position) {
     
     mass         = 0.9;
     relaxRange   = 0.05; // Not in pixel units ( lower = longer range );
@@ -28,9 +28,9 @@ class Flux extends Element {
     
     type = "Flux";
     pos = position;
-    vel = new Vec2D(0,0);
-    acc = new Vec2D(0,0);
-    avgBondPos = new Vec2D(0,0);
+    vel = new Vec3D();
+    acc = new Vec3D();
+    avgBondPos = new Vec3D();
     bonds = new ArrayList<Flux>();
     
     isGhost = false;
@@ -47,10 +47,10 @@ class Flux extends Element {
     numberOfBonds      = flux.getFloat("numberOfBonds");
     
     type = flux.getString("type");
-    pos  = new Vec2D();
-    vel  = new Vec2D( flux.getJSONArray("vel").getFloat(0), flux.getJSONArray("vel").getFloat(1));
-    acc  = new Vec2D();
-    avgBondPos = new Vec2D();
+    pos  = new Vec3D();
+    vel  = new Vec3D( flux.getJSONArray("vel").getFloat(0), flux.getJSONArray("vel").getFloat(1), flux.getJSONArray("vel").getFloat(2));
+    acc  = new Vec3D();
+    avgBondPos = new Vec3D();
     bonds = new ArrayList<Flux>();
     
   }
@@ -64,7 +64,7 @@ class Flux extends Element {
   void reactWithAtom(Atom atom) {
     float affect = affectFunction(pos.distanceTo(atom.pos));
     if(affect > 0) {
-      Vec2D dir = atom.pos.sub(pos).normalize();  // issue?
+      Vec3D dir = atom.pos.sub(pos).normalize();  // issue?
       vel.addSelf(dir.scale(affect));
     }
   }
@@ -93,12 +93,12 @@ class Flux extends Element {
   
   void updateBondRelation() {
     breakAllGhostBonds();
-    avgBondPos = new Vec2D();
+    avgBondPos = new Vec3D();
     if(bonds.size() > 0) {
       for(Flux bond : bonds) {
         avgBondPos.addSelf(bond.pos);
         if( seperationFunction(pos.distanceTo(bond.pos)) > 0.01 ) {
-          Vec2D dir = pos.sub(bond.pos).normalize();
+          Vec3D dir = pos.sub(bond.pos).normalize();
           vel.addSelf(dir.scale(seperationFunction(pos.distanceTo(bond.pos))));
         }
       }
@@ -107,7 +107,7 @@ class Flux extends Element {
   }
   
   void updateMovement() {
-    Vec2D dir = avgBondPos.sub(pos).normalize();  
+    Vec3D dir = avgBondPos.sub(pos).normalize();  
     if(avgBondPos.isZeroVector()) dir.clear();
     acc = dir.scale(relaxFunction( pos.distanceTo(avgBondPos)) );
     vel.addSelf(acc);
@@ -181,7 +181,7 @@ class Flux extends Element {
     JSONElement.setFloat("seperationForce", seperationForce);
     JSONElement.setFloat("bondingDistance", bondingDistance);
     JSONElement.setFloat("numberOfBonds", numberOfBonds);
-    JSONElement.setJSONArray("vel", new JSONArray().setFloat(0, (float)vel.x).setFloat(1, (float)vel.y));
+    JSONElement.setJSONArray("vel", new JSONArray().setFloat(0, (float)vel.x).setFloat(1, (float)vel.y).setFloat(2, (float)vel.z));
     return JSONElement;
   }
 }

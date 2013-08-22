@@ -1,13 +1,13 @@
 class Atom extends Element {
   
-  Vec2D pos;
-  Vec2D vel;
+  Vec3D pos;
+  Vec3D vel;
   
   Atom() {
    type = "Atom";
   }
   
-  Atom(Vec2D position, Vec2D velocity) {
+  Atom(Vec3D position, Vec3D velocity) {
     type = "Atom";
     pos  = position;
     vel  = velocity;
@@ -15,8 +15,8 @@ class Atom extends Element {
   
   Atom(JSONObject atom) {
     type = atom.getString("type");
-    pos  = new Vec2D();
-    vel  = new Vec2D( atom.getJSONArray("vel").getFloat(0), atom.getJSONArray("vel").getFloat(1));
+    pos  = new Vec3D();
+    vel  = new Vec3D( atom.getJSONArray("vel").getFloat(0), atom.getJSONArray("vel").getFloat(1), atom.getJSONArray("vel").getFloat(2));
   }  
   void reactWith(Element element) {
     if( element.type.equals( "Boundary" ) ) reactWithBoundary((Boundary) element);
@@ -37,7 +37,7 @@ class Atom extends Element {
   JSONObject toJSON() {
     JSONObject JSONElement = new JSONObject();
     JSONElement.setString("type", type);
-    JSONElement.setJSONArray("vel", new JSONArray().setFloat(0, vel.x).setFloat(1, vel.y));
+    JSONElement.setJSONArray("vel", new JSONArray().setFloat(0, vel.x).setFloat(1, vel.y).setFloat(2, vel.z));
     return JSONElement;
   }
 }

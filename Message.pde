@@ -3,7 +3,7 @@ class Message {
   Element element;
   NetAddress destination;
   NetAddress source;
-  float transitPosition;
+  Vec2D transitPosition;
 
   Message(){
   }
@@ -14,7 +14,7 @@ class Message {
     source = new NetAddress(JSONMessage.getString("source"), JSONMessage.getInt("sourcePort"));
     setDestination(destination);
     setSource(source);
-    setTransitPosition(JSONMessage.getFloat("transitPosition"));
+    setTransitPosition(new Vec2D(JSONMessage.getJSONArray("transitPosition").getFloat(0), JSONMessage.getJSONArray("transitPosition").getFloat(1))); // This might be buggy
     
     if(JSONMessage.getJSONObject("element").getString("type").equals("Atom")) {
       Atom atom = new Atom(JSONMessage.getJSONObject("element"));
@@ -39,7 +39,7 @@ class Message {
     this.source = source;
   }
 
-  void setTransitPosition(float transPos){
+  void setTransitPosition(Vec2D transPos){
     this.transitPosition = transPos;
   }
 
@@ -50,8 +50,7 @@ class Message {
     jsonMessage.setInt("destinationPort", destination.port());
     jsonMessage.setString("source", source.address());
     jsonMessage.setInt("sourcePort", source.port());
-    jsonMessage.setFloat("transitPosition", transitPosition);
-    
+    jsonMessage.setJSONArray("transitPosition", new JSONArray().setFloat(0, transitPosition.x).setFloat(1, transitPosition.y));    
     return jsonMessage;
   }
   

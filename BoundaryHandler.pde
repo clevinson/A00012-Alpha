@@ -8,7 +8,7 @@ class BoundaryHandler {
     network = networkIO;
   }
 
-  void send(NetAddress destination, Element element, float transitPosition) {
+  void send(NetAddress destination, Element element, Vec2D transitPosition) {
     Message message = new Message();
     message.setDestination(destination);
     message.setTransitPosition(transitPosition);

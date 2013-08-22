@@ -15,7 +15,7 @@ class Cell{
     boundaries = new ArrayList<Boundary>();
     departingElements = new ArrayList<Element>();
     
-    addBoundary(new Boundary(boundaryRadius, new Vec2D(width/2, height/2)));
+    addBoundary(new Boundary(boundaryRadius, new Vec3D()));
   }
   
   void step() {

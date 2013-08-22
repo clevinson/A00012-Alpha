@@ -1,61 +1,52 @@
 class Render{
   
-  float xOffset, yOffset, scale;
   Cell cell;
         
   Render( Cell cell ) {
     this.cell = cell;
-    xOffset = 0;
-    yOffset = 0;
-    scale   = 0.5;
   }
   
   void render() {
     
     boolean mouseNavigation = false;
     boolean fluxLines = true;
-        
-    noStroke();
-    fill(3, 7, 10, 100); 
-    rect(0,0,width,height);
     
-    
-    if( mouseNavigation ) {
-      pushMatrix();
-      translate( xOffset, yOffset );
-      scale( scale );
-    }
-    
+    cam.beginHUD();    
+      noStroke();
+      fill(3, 7, 10, 100); 
+      rect(0,0,width,height);
+    cam.endHUD();
+
+    lights();
+
     for(Element e : cell.elements) {
       
       if(e.type.equals("Atom")) {
+        Atom atom = (Atom) e;
         strokeWeight(4);
         stroke(252, 191, 33);
-        point(((Atom) e).pos.x, ((Atom) e).pos.y);
+        gfx.point(atom.pos);
       }
       
       if(e.type.equals("Boundary")) {
-        Boundary sb = (Boundary) e;
-        stroke(255);
-        strokeWeight(4);
-        ellipse(sb.pos.x, sb.pos.y, sb.radius*2, sb.radius*2);
+        Boundary b = (Boundary) e;
+        noStroke();
+        fill(20,20,100);
+        gfx.sphere(new Sphere(b.pos, b.radius), 50, true);
       }
       
-      if(e.type.equals( "Flux" )) {   
+      if(e.type.equals( "Flux" )) { 
+        Flux flux = (Flux) e;  
         strokeWeight(1);
         stroke(255);
         if( fluxLines ) {
           for( Flux f : ((Flux) e).bonds ) {
-            line( f.pos.x, f.pos.y, ((Flux) e).pos.x, ((Flux) e).pos.y );
+            gfx.line( flux.pos, f.pos );
           }
         }
         strokeWeight(2);
         stroke(230);
-        point( ((Flux) e).pos.x, ((Flux) e).pos.y );
-        line( ((Flux) e).pos.x, 
-              ((Flux) e).pos.y, 
-              ((Flux) e).pos.x + ((Flux) e).vel.x , 
-              ((Flux) e).pos.y + ((Flux) e).vel.y );
+        gfx.point( flux.pos );
       }
       
       if(e.type.equals( "Pulk" )) {

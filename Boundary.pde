@@ -2,10 +2,10 @@ class Boundary extends Element {
   
   BoundaryHandler handler;
   float radius;
-  Vec2D pos;
+  Vec3D pos;
   NetAddress heaven;
   
-  Boundary(float radius, Vec2D pos) {
+  Boundary(float radius, Vec3D pos) {
     type = "Boundary"; 
     handler = new BoundaryHandler(this);
     this.radius = radius;
@@ -20,20 +20,28 @@ class Boundary extends Element {
   
   void reactWithAtom(Atom atom) {
     if(atom.pos.distanceTo(pos) >= radius) {
-      handler.send(heaven, atom, getTetha(atom.pos));
+      handler.send(heaven, atom, getUV(atom.pos));
     }
   }
   
   void reactWithFlux(Flux flux) {
     if(flux.pos.distanceTo(pos) >= radius) {
       flux.isGhost = true;
-      handler.send(heaven, flux, getTetha(flux.pos));
+      handler.send(heaven, flux, getUV(flux.pos));
     }
   }
   
   float getTetha(Vec2D elementPos) {
-    Vec2D v = elementPos.sub(pos);
+    Vec2D v = elementPos.sub(pos.to2DXY());
     return atan2(v.x, v.y);
+  }
+  
+  Vec2D getUV(Vec3D elementsPos) {
+    return new Vec2D();
+  }
+  
+  Vec3D getPosition(Vec2D UV) {
+    return new Vec3D();
   }
   
   Vec2D getPosition(float theta) {
@@ -42,7 +50,7 @@ class Boundary extends Element {
     println(v); 
     v = v.getInverted();
     println(v);
-    return v.addSelf(pos);
+    return v.addSelf(pos.to2DXY());
   }
   
   Vec2D getNormalAtTheta(float theta) {
