@@ -8,7 +8,7 @@ class Render{
   
   void render() {
     
-    println(cell.capacityHandler.toString());
+    //println(cell.capacityHandler.toString());
     
     boolean mouseNavigation = false;
     boolean fluxLines = true;
@@ -20,6 +20,10 @@ class Render{
     cam.endHUD();
 
     lights();
+
+    strokeWeight(10);
+    stroke(255,0,0);
+    point(0,0,0);
 
     for(Element e : cell.elements) {
       
@@ -34,7 +38,7 @@ class Render{
         Boundary b = (Boundary) e;
         noStroke();
         fill(20,20,100);
-        gfx.sphere(new Sphere(b.pos, b.radius), 50, true);
+        //gfx.sphere(new Sphere(b.pos, b.radius), 50, true);
       }
       
       if(e.type.equals( "Flux" )) { 

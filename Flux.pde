@@ -1,6 +1,5 @@
 class Flux extends CartisianElement {
-  
-  Vec3D pos;
+
   Vec3D vel;
   Vec3D acc;
   

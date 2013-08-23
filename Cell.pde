@@ -1,14 +1,17 @@
 class Cell{
 
   CapacityHandler capacityHandler;
+  //VisibleOctree   octree;
   
   ArrayList<Element> elements;
+  ArrayList<CartisianElement> cartisianElements;
   ArrayList<Boundary> boundaries;
   ArrayList<Element> departingElements;
   
   Cell() {
     capacityHandler = new CapacityHandler();
     elements = new ArrayList<Element>();
+    cartisianElements = new ArrayList<CartisianElement>();
     boundaries = new ArrayList<Boundary>();
     departingElements = new ArrayList<Element>();
   }
@@ -16,6 +19,7 @@ class Cell{
   Cell(float boundaryRadius) {
     capacityHandler = new CapacityHandler();
     elements = new ArrayList<Element>();
+    cartisianElements = new ArrayList<CartisianElement>();
     boundaries = new ArrayList<Boundary>();
     departingElements = new ArrayList<Element>();
     
@@ -48,6 +52,8 @@ class Cell{
   }
   
   void addElement(Element element) {
+    if(element.type.equals("Atom")) cartisianElements.add((CartisianElement) element);
+    if(element.type.equals("Flux")) cartisianElements.add((CartisianElement) element);
     elements.add(element);
   }
 
@@ -72,3 +78,29 @@ class Cell{
     println( "Element list contains " + atom + " atoms, " + boundary + " boundary and " + flux + " flux." );
   }
 }
+/*
+class VisibleOctree extends PointOctree {
+  VisibleOctree(Vec3D origin, float size) {
+    Vec3D v = new Vec3D(-1,-1,-1).scale(size/2).add(origin);
+    super(v, size);
+  } 
+ 
+  void draw() {
+    drawNode(this);
+  }
+
+  void drawNode(PointOctree n) {
+    if (n.getNumChildren() > 0) {
+      noFill();
+      stroke(n.getDepth(), 20);
+      pushMatrix(); 
+      translate(n.x, n.y, n.z);
+      box(n.getNodeSize());
+      popMatrix();
+      PointOctree[] childNodes=n.getChildren();
+      for (int i = 0; i < 8; i++) {
+        if(childNodes[i] != null) drawNode(childNodes[i]); 
+      }
+    }
+  }
+}*/

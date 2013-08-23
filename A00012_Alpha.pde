@@ -4,6 +4,7 @@ import toxi.math.waves.*;
 import toxi.math.noise.*;
 import toxi.processing.*;
 import java.util.Iterator;
+import java.util.Collection;
 import java.awt.event.*;
 import peasy.*;
 
@@ -34,8 +35,8 @@ void setup() {
 }
 
 void draw() {
-    
   networkIO.tick();
   cell.step();
   render.render();
+  makeOctree();
 }

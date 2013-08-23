@@ -23,5 +23,6 @@ class CartisianElement extends Element{
   
   CartisianElement() {
     type = "Cartisian Element";
+    pos = new Vec3D();
   }
 }
