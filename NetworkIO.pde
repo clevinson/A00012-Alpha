@@ -48,16 +48,15 @@ class NetworkIO{
   }
 
   void oscEvent(OscMessage theOscMessage) {
-    println("recieved message");
+    // println("recieved message");
     if(theOscMessage.checkAddrPattern("/test")){
       if(theOscMessage.checkTypetag("s")){
-        println(theOscMessage.get(0).stringValue());
         toInQueue(new Message(theOscMessage.get(0).stringValue()));
       }else{
-        println("[ERROR] Received unknown typetag: " + theOscMessage.typetag() + " for OSC message " + theOscMessage.addrPattern());
+        //println("[ERROR] Received unknown typetag: " + theOscMessage.typetag() + " for OSC message " + theOscMessage.addrPattern());
       }
     }else{
-      println("[ERROR] Received unknown OSC message with address pattern: " + theOscMessage.addrPattern());
+      //println("[ERROR] Received unknown OSC message with address pattern: " + theOscMessage.addrPattern());
     }
   }
 

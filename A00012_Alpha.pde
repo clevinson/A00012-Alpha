@@ -4,6 +4,8 @@ import toxi.math.waves.*;
 import toxi.math.noise.*;
 import toxi.processing.*;
 import java.util.Iterator;
+import java.util.Collections;
+import java.util.Comparator;
 import java.awt.event.*;
 import peasy.*;
 
