@@ -8,7 +8,7 @@ class Render{
   
   void render() {
     
-    //println(cell.capacityHandler.toString());
+    println(cell.capacityHandler.toString());
     
     boolean mouseNavigation = false;
     boolean fluxLines = true;
@@ -20,10 +20,20 @@ class Render{
     cam.endHUD();
 
     lights();
-
-    strokeWeight(10);
+    
     stroke(255,0,0);
-    point(0,0,0);
+    if(true) { // Render Pivot Point
+      strokeWeight(10);
+      point(0,0,0);
+    }
+    if(false) { // Render Cell Axis-Aligned Bounding Box (AABB) 
+      strokeWeight(1);
+      noFill();
+      gfx.mesh(cell.getAABB().toMesh());
+    }
+    
+    
+    if(cell.octree != null) cell.octree.draw();
 
     for(Element e : cell.elements) {
       

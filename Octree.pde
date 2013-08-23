@@ -21,8 +21,8 @@ class Octree extends AABB implements Shape3D {
     }
   }
   
-  public Octree(Vec3D origin, float size) {
-    this(null, origin.subSelf(size/2, size/2, size/2), size / 2);
+  public Octree(Vec3D origin, float halfSize) {
+    this(null, origin.subSelf(halfSize, halfSize, halfSize), halfSize);
   }
 
   public boolean addElements(ArrayList<CartisianElement> cartisianElements) {

@@ -1,7 +1,7 @@
 class Cell{
 
   CapacityHandler capacityHandler;
-  //VisibleOctree   octree;
+  Octree octree;
   
   ArrayList<Element> elements;
   ArrayList<CartisianElement> cartisianElements;
@@ -29,6 +29,8 @@ class Cell{
   void step() {
     
     capacityHandler.startCapacityMeasurement();
+    octree = new Octree(new Vec3D(), max(getAABB().getExtent().toArray()));
+    octree.addElements(cartisianElements);
     
     for(int A=0; A < elements.size(); A++) {
       Element ElementA = (Element) elements.get(A);
@@ -66,6 +68,18 @@ class Cell{
     departingElements.add(element);
   }
   
+  AABB getAABB() {
+    Vec3D min = new Vec3D();
+    Vec3D max = new Vec3D();
+    for(CartisianElement e : cartisianElements) {
+      min.minSelf(e.pos);
+      max.maxSelf(e.pos); 
+    }
+    
+    
+    return new AABB(new Vec3D(), min.abs().maxSelf(max));
+  }
+  
   void debugCountElements( ArrayList<Element> elems ) {
     int atom      = 0;
     int boundary  = 0;
@@ -78,29 +92,3 @@ class Cell{
     println( "Element list contains " + atom + " atoms, " + boundary + " boundary and " + flux + " flux." );
   }
 }
-/*
-class VisibleOctree extends PointOctree {
-  VisibleOctree(Vec3D origin, float size) {
-    Vec3D v = new Vec3D(-1,-1,-1).scale(size/2).add(origin);
-    super(v, size);
-  } 
- 
-  void draw() {
-    drawNode(this);
-  }
-
-  void drawNode(PointOctree n) {
-    if (n.getNumChildren() > 0) {
-      noFill();
-      stroke(n.getDepth(), 20);
-      pushMatrix(); 
-      translate(n.x, n.y, n.z);
-      box(n.getNodeSize());
-      popMatrix();
-      PointOctree[] childNodes=n.getChildren();
-      for (int i = 0; i < 8; i++) {
-        if(childNodes[i] != null) drawNode(childNodes[i]); 
-      }
-    }
-  }
-}*/

@@ -38,5 +38,4 @@ void draw() {
   networkIO.tick();
   cell.step();
   render.render();
-  makeOctree();
 }

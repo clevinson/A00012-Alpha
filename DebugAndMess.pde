@@ -14,10 +14,3 @@ void keyPressed() {
     cell.addElement(f);
   }
 }
-
-
-void makeOctree() {
-   Octree oct = new Octree(new Vec3D(), 4048);
-   oct.addElements(cell.cartisianElements);
-   oct.draw();
-}
