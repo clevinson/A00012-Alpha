@@ -1,4 +1,4 @@
-  class Element{
+class Element{
   
   String type;
   
@@ -14,5 +14,14 @@
   
   JSONObject toJSON() {
     return new JSONObject();
+  }
+}
+
+class CartisianElement extends Element{
+  
+  Vec3D pos;
+  
+  CartisianElement() {
+    type = "Cartisian Element";
   }
 }

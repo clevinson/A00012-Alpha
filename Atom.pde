@@ -1,4 +1,4 @@
-class Atom extends Element {
+class Atom extends CartisianElement {
   
   Vec3D pos;
   Vec3D vel;
