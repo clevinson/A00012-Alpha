@@ -95,6 +95,79 @@ class Octree extends AABB implements Shape3D {
     cartElements = null;
   }
   
+  public Octree getLeafForElement(CartisianElement e) {
+    // if not a leaf node...
+    if (e.pos.isInAABB(this)) {
+      if (numChildren > 0) {
+        int octant = getOctantID(e.pos.sub(offset));
+        if (children[octant] != null) {
+          return children[octant].getLeafForElement(e);
+        }
+      } else if (cartElements != null) {
+        return this;
+      }
+    }
+    return null;
+  }
+
+  public ArrayList<CartisianElement> getElementsWithinBox(AABB b) {
+    ArrayList<CartisianElement> results = null;
+    if (this.intersectsBox(b)) {
+        if (cartElements != null) {
+            for (CartisianElement e : cartElements) {
+                if (e.pos.isInAABB(b)) {
+                    if (results == null) {
+                        results = new ArrayList<CartisianElement>();
+                    }
+                    results.add(e);
+                }
+            }
+        } else if (numChildren > 0) {
+            for (int i = 0; i < 8; i++) {
+                if (children[i] != null) {
+                    ArrayList<CartisianElement> cartElements = children[i].getElementsWithinBox(b);
+                    if (cartElements != null) {
+                        if (results == null) {
+                            results = new ArrayList<CartisianElement>();
+                        }
+                        results.addAll(cartElements);
+                    }
+                }
+            }
+        }
+    }
+    return results;
+  }
+  
+  public ArrayList<CartisianElement> getPointsWithinSphere(Sphere s) {
+    ArrayList<CartisianElement> results = null;
+    if (this.intersectsSphere(s)) {
+      if (cartElements != null) {
+        for (CartisianElement e : cartElements) {
+          if (s.containsPoint(e.pos)) {
+            if (results == null) {
+              results = new ArrayList<CartisianElement>();
+            }
+            results.add(e);
+          }
+        }
+      } else if (numChildren > 0) {
+        for (int i = 0; i < 8; i++) {
+          if (children[i] != null) {
+            ArrayList<CartisianElement> cartElements = children[i].getPointsWithinSphere(s);
+            if (cartElements != null) {
+              if (results == null) {
+                results = new ArrayList<CartisianElement>();
+              }
+              results.addAll(cartElements);
+            }
+          }
+        }
+      }
+    }
+    return results;
+  }
+  
   void draw() {
     drawNode(this);
   }
